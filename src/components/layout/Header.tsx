@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { 
   BarChart3, 
   Search, 
@@ -12,6 +13,7 @@ import {
   Filter
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAdvancedMode } from "@/hooks/useAdvancedMode";
 
 interface HeaderProps {
   currentPage: string;
@@ -21,6 +23,7 @@ interface HeaderProps {
 export function Header({ currentPage, onPageChange }: HeaderProps) {
   const [selectedLeague, setSelectedLeague] = useState("NFL");
   const [selectedDateScope, setSelectedDateScope] = useState("Today");
+  const { isAdvanced, toggleMode } = useAdvancedMode();
 
   const navigationItems = [
     { id: "dashboard", label: "Dashboard", icon: BarChart3 },
@@ -90,21 +93,35 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
           })}
         </nav>
 
-        {/* Date Scope Selector */}
-        <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-muted-foreground" />
-          <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
-            {dateScopes.map((scope) => (
-              <Button
-                key={scope}
-                variant={selectedDateScope === scope ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setSelectedDateScope(scope)}
-                className="h-8 px-3 text-xs"
-              >
-                {scope}
-              </Button>
-            ))}
+        {/* Controls */}
+        <div className="flex items-center gap-4">
+          {/* Advanced Mode Toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">
+              {isAdvanced ? "Advanced" : "Simple"}
+            </span>
+            <Switch
+              checked={isAdvanced}
+              onCheckedChange={toggleMode}
+            />
+          </div>
+
+          {/* Date Scope Selector */}
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+              {dateScopes.map((scope) => (
+                <Button
+                  key={scope}
+                  variant={selectedDateScope === scope ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setSelectedDateScope(scope)}
+                  className="h-8 px-3 text-xs"
+                >
+                  {scope}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
