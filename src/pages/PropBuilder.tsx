@@ -287,44 +287,59 @@ export default function PropBuilder() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Target className="h-8 w-8 text-accent" />
-            Prop Builder
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Build data-driven betting propositions with AI insights
-          </p>
-        </div>
-      </div>
+    <div className="container mx-auto p-6 space-y-8 animate-fade-in">
+      {/* Hero Header */}
+      <Card className="bg-gradient-surface border-accent/20">
+        <CardContent className="p-8">
+          <div className="flex items-center justify-between">
+            <div className="space-y-3">
+              <h1 className="text-3xl font-bold flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-gradient-accent">
+                  <Target className="h-6 w-6 text-white" />
+                </div>
+                Prop Builder
+              </h1>
+              <p className="text-muted-foreground text-lg max-w-2xl">
+                Build winning propositions with AI-powered analysis. Follow our guided steps to analyze any player prop with confidence.
+              </p>
+            </div>
+            <div className="hidden md:block text-6xl opacity-20">
+              🎯
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Progress Steps */}
-      <Card>
+      <Card className="border-accent/20 bg-gradient-surface">
         <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            {steps.map((step, index) => (
-              <div key={step.id} className="flex items-center">
-                <div 
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    index <= currentStep 
-                      ? "bg-accent text-accent-foreground" 
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {index + 1}
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-center">Build Your Prop in 4 Simple Steps</h2>
+            <div className="flex items-center justify-between">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center">
+                  <div 
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      index <= currentStep 
+                        ? "bg-gradient-accent text-white shadow-lg" 
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                  <span className={`ml-3 text-sm font-medium ${
+                    index <= currentStep ? "text-foreground" : "text-muted-foreground"
+                  }`}>
+                    {step.label}
+                  </span>
+                  {index < steps.length - 1 && (
+                    <div className={`w-12 h-px mx-6 transition-all ${
+                      index < currentStep ? "bg-accent" : "bg-border"
+                    }`} />
+                  )}
                 </div>
-                <span className={`ml-2 text-sm ${
-                  index <= currentStep ? "text-foreground" : "text-muted-foreground"
-                }`}>
-                  {step.label}
-                </span>
-                {index < steps.length - 1 && (
-                  <div className="w-12 h-px bg-border mx-4" />
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
