@@ -294,7 +294,7 @@ export default function Research() {
                 </div>
               </div>
               <Badge variant="secondary" className="text-sm py-2 px-4">
-                🚀 Coming Soon - Advanced team analytics
+                🚀 Demo preview - Advanced team analytics available in full version
               </Badge>
             </CardContent>
           </Card>

@@ -371,7 +371,7 @@ export default function AskFynetic() {
                                   This feature demonstrates how FYNETIC would provide detailed analysis and suggestions. 
                                   In the full version, this would show real-time data and actionable insights.
                                 </p>
-                                <Button disabled className="w-full">Feature Coming Soon</Button>
+                                <Button disabled className="w-full">Learn More (Demo)</Button>
                               </div>
                             )}
                           </Modal>
@@ -427,7 +427,7 @@ export default function AskFynetic() {
                 }
               </p>
               <p className="text-xs text-warning mt-1 text-center font-body">
-                🚀 Static preview - Full AI chat coming soon
+                🚀 Demo preview - Full AI chat available in full version
               </p>
             </CardContent>
           </Card>

@@ -3,6 +3,8 @@ import { Header } from "@/components/layout/Header";
 import Dashboard from "./Dashboard";
 import Research from "./Research";
 import PropBuilder from "./PropBuilder";
+import AskFynetic from "./AskFynetic";
+import BetTracker from "./BetTracker";
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
@@ -16,19 +18,9 @@ const Index = () => {
       case "prop-builder":
         return <PropBuilder />;
       case "ask-fynetic":
-        return (
-          <div className="container mx-auto p-6 text-center">
-            <h1 className="text-3xl font-bold mb-4">Ask FYNETIC</h1>
-            <p className="text-muted-foreground">AI Chat Assistant Coming Soon</p>
-          </div>
-        );
+        return <AskFynetic />;
       case "bet-tracker":
-        return (
-          <div className="container mx-auto p-6 text-center">
-            <h1 className="text-3xl font-bold mb-4">Bet Tracker</h1>
-            <p className="text-muted-foreground">Track Your Bets Coming Soon</p>
-          </div>
-        );
+        return <BetTracker />;
       case "admin":
         return (
           <div className="container mx-auto p-6 text-center">

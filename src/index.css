@@ -1,3 +1,13 @@
+/* Eightgon font */
+@font-face {
+  font-family: "Eightgon";
+  src: url("/fonts/eightgon/Eightgon.woff2") format("woff2"),
+       url("/fonts/eightgon/Eightgon.woff") format("woff");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,133 +18,124 @@ All colors MUST be HSL format for proper theming.
 
 @layer base {
   :root {
-    /* Premium Typography */
-    --font-heading: 'Orbitron', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-
-    /* Elegant Dark Theme - Deep Navy Charcoal Base */
-    --background: 222 42% 8%;     /* Deep Navy Charcoal #0B0F19 */
-    --foreground: 213 27% 94%;    /* Warm off-white #F1F5F9 */
-
-    /* Card System - Soft slate surfaces */
-    --card: 217 19% 15%;          /* Slate Gray #1A2233 */
-    --card-foreground: 213 27% 94%;
-    --card-hover: 217 19% 18%;
-
-    /* Interactive Elements */
-    --popover: 217 19% 15%;
-    --popover-foreground: 213 27% 94%;
-
-    /* Hero Brand Accent - Cyber Teal */
-    --primary: 174 96% 39%;       /* Cyber Teal #00C6AE */
-    --primary-foreground: 213 27% 94%;
-    --primary-hover: 174 96% 34%;
-
-    /* Cyber Teal Accent */
-    --accent: 174 96% 39%;        /* Cyber Teal #00C6AE */
-    --accent-foreground: 213 27% 94%;
-    --accent-hover: 174 96% 34%;
-
-    /* Electric Blue Secondary */
-    --secondary: 217 91% 60%;     /* Electric Blue #2563EB */
-    --secondary-foreground: 213 27% 94%;
-    --secondary-hover: 217 91% 55%;
-
-    /* Muted elements */
-    --muted: 217 19% 18%;
-    --muted-foreground: 214 15% 59%; /* Muted gray #94A3B8 */
-
-    /* Status Colors - Elegant palette */
-    --success: 142 71% 45%;       /* Emerald #22C55E */
-    --success-foreground: 213 27% 94%;
-    --warning: 43 96% 56%;
-    --warning-foreground: 222 42% 8%;
-    --destructive: 0 84% 60%;     /* Soft red #EF4444 */
-    --destructive-foreground: 213 27% 94%;
-    --live: 0 84% 60%;
-    --live-foreground: 213 27% 94%;
-
-    /* Borders and inputs - Subtle slate */
-    --border: 217 19% 23%;        /* Subtle slate #2C3445 */
-    --input: 217 19% 23%;
-    --ring: 217 91% 60%;
-
-    /* Premium Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(174 96% 39%));
-    --gradient-accent: linear-gradient(135deg, hsl(174 96% 39%), hsl(217 91% 60%));
-    --gradient-surface: linear-gradient(180deg, hsl(217 19% 15%), hsl(222 42% 8%));
-    --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
+    /* Background Colors */
+    --background: 11 15 25; /* Deep Navy Charcoal #0B0F19 */
+    --foreground: 241 245 249; /* Warm Off-White #F1F5F9 */
     
-    /* Data Visualization - Cyber themed */
-    --chart-1: 174 96% 39%;       /* Cyber Teal */
-    --chart-2: 217 91% 60%;       /* Electric Blue */
-    --chart-3: 142 71% 45%;       /* Emerald */
-    --chart-4: 43 96% 56%;        /* Warning yellow */
-    --chart-5: 262 83% 58%;       /* Purple */
-
+    /* Surface & Card Colors */
+    --card: 26 34 51; /* Slate Gray #1A2233 */
+    --card-foreground: 241 245 249;
+    --card-hover: 30 39 58;
+    --popover: 26 34 51;
+    --popover-foreground: 241 245 249;
+    
+    /* Primary Brand (Cyber Teal) */
+    --primary: 0 198 174; /* Cyber Teal #00C6AE */
+    --primary-foreground: 255 255 255;
+    --primary-hover: 24 214 192;
+    
+    /* Secondary (Electric Blue) */
+    --secondary: 37 99 235; /* Electric Blue #2563EB */
+    --secondary-foreground: 255 255 255;
+    --secondary-hover: 29 78 216;
+    
+    /* Muted Colors */
+    --muted: 44 52 69; /* Neutral Border #2C3445 */
+    --muted-foreground: 148 163 184; /* Muted Gray #94A3B8 */
+    
+    /* Accent (Cyber Teal) */
+    --accent: 0 198 174;
+    --accent-foreground: 255 255 255;
+    --accent-hover: 24 214 192; /* Lighter teal for hover */
+    
+    /* Status Colors */
+    --destructive: 239 68 68; /* Red #EF4444 */
+    --destructive-foreground: 248 250 252;
+    
+    --success: 34 197 94; /* Emerald #22C55E */
+    --success-foreground: 255 255 255;
+    
+    --warning: 251 191 36; /* Amber #FBBF24 */
+    --warning-foreground: 30 41 59;
+    
+    --live: 239 68 68;
+    --live-foreground: 248 250 252;
+    
+    /* Border & Input */
+    --border: 44 52 69;
+    --input: 44 52 69;
+    --ring: 0 198 174;
+    
+    /* Chart Colors */
+    --chart-1: 0 198 174; /* Cyber Teal */
+    --chart-2: 37 99 235; /* Electric Blue */
+    --chart-3: 34 197 94; /* Emerald */
+    --chart-4: 168 85 247; /* Purple */
+    --chart-5: 251 191 36; /* Amber */
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(174 100% 39%), hsl(174 100% 45%));
+    --gradient-card: linear-gradient(145deg, hsl(26 34 51), hsl(26 34 51 / 0.8));
+    --gradient-surface: linear-gradient(145deg, hsl(44 52 69 / 0.3), hsl(44 52 69 / 0.1));
+    
+    /* Typography */
+    --font-heading: 'Eightgon', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    
     --radius: 1rem;
-
+    
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
     /* Dark Mode maintains consistent cyber-teal theme */
-    --background: 222 42% 8%;
-    --foreground: 213 27% 94%;
-
-    --card: 217 19% 15%;
-    --card-foreground: 213 27% 94%;
-    --card-hover: 217 19% 18%;
-
-    --popover: 217 19% 15%;
-    --popover-foreground: 213 27% 94%;
-
-    --primary: 174 96% 39%;
-    --primary-foreground: 213 27% 94%;
-    --primary-hover: 174 96% 34%;
-
-    --accent: 174 96% 39%;
-    --accent-foreground: 213 27% 94%;
-    --accent-hover: 174 96% 34%;
-
-    --secondary: 217 91% 60%;
-    --secondary-foreground: 213 27% 94%;
-    --secondary-hover: 217 91% 55%;
-
-    --muted: 217 19% 18%;
-    --muted-foreground: 214 15% 59%;
-
-    --success: 142 71% 45%;
-    --success-foreground: 213 27% 94%;
-    --warning: 43 96% 56%;
-    --warning-foreground: 222 42% 8%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 213 27% 94%;
-    --live: 0 84% 60%;
-    --live-foreground: 213 27% 94%;
-
-    --border: 217 19% 23%;
-    --input: 217 19% 23%;
-    --ring: 217 91% 60%;
-
-    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(174 96% 39%));
-    --gradient-accent: linear-gradient(135deg, hsl(174 96% 39%), hsl(217 91% 60%));
-    --gradient-surface: linear-gradient(180deg, hsl(217 19% 15%), hsl(222 42% 8%));
-    --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
+    --background: 11 15 25; /* Deep Navy Charcoal #0B0F19 */
+    --foreground: 241 245 249; /* Warm Off-White #F1F5F9 */
+    
+    --card: 26 34 51; /* Slate Gray #1A2233 */
+    --card-foreground: 241 245 249;
+    --card-hover: 30 39 58;
+    --popover: 26 34 51;
+    --popover-foreground: 241 245 249;
+    
+    --primary: 0 198 174; /* Cyber Teal #00C6AE */
+    --primary-foreground: 255 255 255;
+    --primary-hover: 24 214 192;
+    
+    --accent: 0 198 174;
+    --accent-foreground: 255 255 255;
+    --accent-hover: 24 214 192;
+    
+    --secondary: 37 99 235; /* Electric Blue #2563EB */
+    --secondary-foreground: 255 255 255;
+    --secondary-hover: 29 78 216;
+    
+    --muted: 44 52 69;
+    --muted-foreground: 148 163 184;
+    
+    --success: 34 197 94;
+    --success-foreground: 255 255 255;
+    --warning: 251 191 36;
+    --warning-foreground: 30 41 59;
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
+    --live: 239 68 68;
+    --live-foreground: 248 250 252;
+    
+    --border: 44 52 69;
+    --input: 44 52 69;
+    --ring: 0 198 174;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(174 100% 39%), hsl(174 100% 45%));
+    --gradient-card: linear-gradient(145deg, hsl(26 34 51), hsl(26 34 51 / 0.8));
+    --gradient-surface: linear-gradient(145deg, hsl(44 52 69 / 0.3), hsl(44 52 69 / 0.1));
   }
 }
 

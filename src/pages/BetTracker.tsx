@@ -350,7 +350,7 @@ export default function BetTracker() {
             <Button variant="outline" className="flex-1">Cancel</Button>
           </div>
           <p className="text-xs text-warning text-center">
-            🚀 Demo mode - Full bet tracking coming soon
+            🚀 Demo preview - Full bet tracking available in full version
           </p>
         </div>
       </DialogContent>
