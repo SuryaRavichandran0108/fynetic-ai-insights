@@ -2,8 +2,14 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { TrendlineChart, BarChart, DonutChart } from "@/components/ChartPlaceholders";
+import { StatusBadge, LeagueBadge, ConfidenceBadge } from "@/components/Badges";
 import { 
   TrendingUp, 
   Plus,
@@ -12,103 +18,156 @@ import {
   BarChart3,
   Trophy,
   Clock,
-  CheckCircle,
-  XCircle,
-  Minus
+  Filter,
+  Search,
+  Calendar,
+  Eye,
+  EyeOff,
+  FileText,
+  Settings
 } from "lucide-react";
 
-interface Bet {
+interface BetCard {
   id: string;
+  title: string;
   player: string;
   market: string;
   line: string;
   stake: number;
   odds: number;
   book: string;
-  status: "scheduled" | "live" | "won" | "lost" | "push";
+  league: 'NFL' | 'NBA' | 'MLB';
+  status: 'won' | 'lost' | 'pending' | 'push';
   result?: string;
   payout?: number;
-  gameTime: string;
+  date: string;
+  confidence?: number;
+  sparkline: number[];
 }
 
 export default function BetTracker() {
   const [selectedTab, setSelectedTab] = useState("overview");
+  const [showEmpty, setShowEmpty] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState("30D");
+  const [selectedLeague, setSelectedLeague] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
 
-  const mockBets: Bet[] = [
+  // Mock KPI Data
+  const kpiData = {
+    roi: 12.4,
+    hitRate: 58,
+    openSlips: 2,
+    totalBets: 34,
+    totalWagered: 850,
+    totalWon: 955.40,
+    netProfit: 105.40,
+    bestWin: 87.50,
+    avgOdds: -118,
+    winStreak: 3
+  };
+
+  // Mock Bet Data
+  const demoBets: BetCard[] = [
     {
       id: "1",
+      title: "Josh Allen Over 1.5 Pass TDs",
       player: "Josh Allen",
-      market: "Passing Yards Over",
-      line: "259.5",
+      market: "Passing TDs",
+      line: "Over 1.5",
       stake: 25,
       odds: -115,
       book: "DraftKings",
+      league: "NFL",
       status: "won",
-      result: "287 yards",
+      result: "3 TDs",
       payout: 46.74,
-      gameTime: "2 days ago"
+      date: "2 days ago",
+      confidence: 72,
+      sparkline: [1, 3, 2, 1, 2, 3, 1, 2, 2, 3]
     },
     {
       id: "2", 
-      player: "Travis Kelce",
-      market: "Receiving Yards Over",
-      line: "67.5",
-      stake: 50,
+      title: "Tyreek Hill Over 89.5 Receiving Yards",
+      player: "Tyreek Hill",
+      market: "Receiving Yards",
+      line: "Over 89.5",
+      stake: 30,
       odds: -110,
       book: "FanDuel",
+      league: "NFL", 
       status: "lost",
-      result: "52 yards",
-      gameTime: "2 days ago"
+      result: "73 yards",
+      date: "3 days ago",
+      confidence: 68,
+      sparkline: [112, 67, 143, 45, 89, 134, 76, 98, 102, 87]
     },
     {
       id: "3",
-      player: "Patrick Mahomes",
-      market: "Passing TDs Over",
-      line: "1.5",
-      stake: 30,
-      odds: -140,
+      title: "Patrick Mahomes Over 2.5 Pass TDs",
+      player: "Patrick Mahomes", 
+      market: "Passing TDs",
+      line: "Over 2.5", 
+      stake: 20,
+      odds: 140,
       book: "BetMGM",
-      status: "scheduled",
-      gameTime: "Tonight 8:20 PM"
+      league: "NFL",
+      status: "pending",
+      date: "Tonight 8:20 PM",
+      confidence: 65,
+      sparkline: [2, 3, 1, 2, 3, 2, 1, 2, 3, 2]
+    },
+    {
+      id: "4",
+      title: "CMC Over 89.5 Rushing Yards",
+      player: "Christian McCaffrey",
+      market: "Rushing Yards", 
+      line: "Over 89.5",
+      stake: 35,
+      odds: -105,
+      book: "Caesars",
+      league: "NFL",
+      status: "won", 
+      result: "127 yards",
+      payout: 68.33,
+      date: "1 week ago",
+      confidence: 75,
+      sparkline: [89, 134, 76, 98, 127, 87, 112, 143, 95, 108]
+    },
+    {
+      id: "5",
+      title: "Steph Curry Over 4.5 Threes",
+      player: "Stephen Curry",
+      market: "3-Point FGM",
+      line: "Over 4.5", 
+      stake: 40,
+      odds: 115,
+      book: "DraftKings",
+      league: "NBA",
+      status: "push",
+      result: "Exactly 4",
+      date: "5 days ago",
+      sparkline: [6, 3, 7, 2, 4, 8, 1, 5, 4, 6]
+    },
+    {
+      id: "6",
+      title: "Jayson Tatum Over 27.5 Points", 
+      player: "Jayson Tatum",
+      market: "Points",
+      line: "Over 27.5",
+      stake: 50,
+      odds: -120,
+      book: "FanDuel", 
+      league: "NBA",
+      status: "won",
+      result: "34 points",
+      payout: 91.67,
+      date: "1 week ago",
+      confidence: 70,
+      sparkline: [28, 22, 34, 31, 19, 29, 33, 24, 27, 30]
     }
   ];
 
-  const mockStats = {
-    totalBets: 12,
-    wonBets: 7,
-    lostBets: 4,
-    pushBets: 1,
-    totalWagered: 420,
-    totalWon: 487.32,
-    roi: 16.0,
-    hitRate: 58.3,
-    avgOdds: -118,
-    bestWin: 84.50
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "won": return <CheckCircle className="h-4 w-4 text-success" />;
-      case "lost": return <XCircle className="h-4 w-4 text-destructive" />;
-      case "push": return <Minus className="h-4 w-4 text-warning" />;
-      case "live": return <Clock className="h-4 w-4 text-accent animate-pulse" />;
-      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "won": return "bg-success/10 text-success border-success/20";
-      case "lost": return "bg-destructive/10 text-destructive border-destructive/20";
-      case "push": return "bg-warning/10 text-warning border-warning/20";
-      case "live": return "bg-accent/10 text-accent border-accent/20";
-      default: return "bg-muted/50 text-muted-foreground border-muted/20";
-    }
-  };
-
-  const formatOdds = (odds: number) => {
-    return odds > 0 ? `+${odds}` : odds.toString();
-  };
+  const formatOdds = (odds: number) => odds > 0 ? `+${odds}` : odds.toString();
 
   const calculatePotentialPayout = (stake: number, odds: number) => {
     if (odds > 0) {
@@ -117,6 +176,186 @@ export default function BetTracker() {
       return stake + (stake / Math.abs(odds) * 100);
     }
   };
+
+  const filteredBets = demoBets.filter(bet => {
+    if (selectedLeague !== "all" && bet.league !== selectedLeague) return false;
+    if (selectedStatus !== "all" && bet.status !== selectedStatus) return false;
+    return true;
+  });
+
+  const BetDetailSheet = ({ bet }: { bet: BetCard }) => (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="sm" className="text-accent hover:text-accent-hover">
+          View Details
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="w-[400px] bg-card border-accent/30">
+        <SheetHeader>
+          <SheetTitle className="font-heading text-foreground">{bet.title}</SheetTitle>
+        </SheetHeader>
+        <div className="space-y-6 mt-6">
+          {/* Bet Info */}
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Market</span>
+              <span className="font-semibold">{bet.market} {bet.line}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Stake</span>
+              <span className="font-semibold">${bet.stake}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Odds</span>
+              <span className="font-semibold">{formatOdds(bet.odds)}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Book</span>
+              <span className="font-semibold">{bet.book}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Status</span>
+              <StatusBadge status={bet.status} />
+            </div>
+          </div>
+
+          {bet.result && (
+            <div className="p-4 rounded-xl bg-gradient-surface border border-accent/20">
+              <h3 className="font-heading font-semibold text-sm mb-2">Result</h3>
+              <p className="text-accent font-medium">{bet.result}</p>
+              {bet.payout && (
+                <p className={`text-sm mt-1 ${bet.status === 'won' ? 'text-success' : 'text-destructive'}`}>
+                  {bet.status === 'won' ? `Won: +$${bet.payout}` : `Lost: -$${bet.stake}`}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* FYNETIC Analysis */}
+          <div className="space-y-3">
+            <h3 className="font-heading font-semibold text-foreground">What FYNETIC Saw</h3>
+            <div className="space-y-2">
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 bg-accent rounded-full mt-2" />
+                <p className="text-sm text-muted-foreground">
+                  Player averaging above line in recent games
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 bg-accent rounded-full mt-2" />
+                <p className="text-sm text-muted-foreground">
+                  Favorable matchup conditions identified
+                </p>
+              </div>
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 bg-accent rounded-full mt-2" />
+                <p className="text-sm text-muted-foreground">
+                  Weather and game script aligned with projection
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Performance Chart */}
+          <div className="space-y-2">
+            <h3 className="font-heading font-semibold text-sm text-foreground">Recent Performance</h3>
+            <div className="p-3 rounded-lg bg-muted/30">
+              <TrendlineChart data={bet.sparkline} />
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="space-y-2">
+            <Button disabled className="w-full" variant="outline">
+              <FileText className="h-4 w-4 mr-2" />
+              Export PDF (Demo)
+            </Button>
+            {bet.status === "pending" && (
+              <Button disabled className="w-full">
+                <Settings className="h-4 w-4 mr-2" />
+                Settle Bet (Demo)
+              </Button>
+            )}
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+
+  const AddBetModal = () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent-hover rounded-xl shadow-lg hover:shadow-accent/25">
+          <Plus className="h-4 w-4" />
+          Add Demo Bet
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="bg-card border-accent/30 max-w-md">
+        <DialogHeader>
+          <DialogTitle className="font-heading text-foreground">Add New Bet</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="player" className="text-sm font-heading font-medium">Player</Label>
+            <Input id="player" placeholder="e.g. Josh Allen" className="bg-background border-accent/30" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="market" className="text-sm font-heading font-medium">Market</Label>
+            <Select>
+              <SelectTrigger className="bg-background border-accent/30">
+                <SelectValue placeholder="Select market" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="passing-yards">Passing Yards</SelectItem>
+                <SelectItem value="passing-tds">Passing TDs</SelectItem>
+                <SelectItem value="rushing-yards">Rushing Yards</SelectItem>
+                <SelectItem value="receiving-yards">Receiving Yards</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="line" className="text-sm font-heading font-medium">Line</Label>
+              <Input id="line" placeholder="259.5" className="bg-background border-accent/30" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="stake" className="text-sm font-heading font-medium">Stake</Label>
+              <Input id="stake" placeholder="25" className="bg-background border-accent/30" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="odds" className="text-sm font-heading font-medium">Odds</Label>
+              <Input id="odds" placeholder="-115" className="bg-background border-accent/30" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="book" className="text-sm font-heading font-medium">Sportsbook</Label>
+              <Select>
+                <SelectTrigger className="bg-background border-accent/30">
+                  <SelectValue placeholder="Book" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draftkings">DraftKings</SelectItem>
+                  <SelectItem value="fanduel">FanDuel</SelectItem>
+                  <SelectItem value="betmgm">BetMGM</SelectItem>
+                  <SelectItem value="caesars">Caesars</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex gap-2 pt-4">
+            <Button disabled className="flex-1">
+              Add Bet (Demo)
+            </Button>
+            <Button variant="outline" className="flex-1">Cancel</Button>
+          </div>
+          <p className="text-xs text-warning text-center">
+            🚀 Demo mode - Full bet tracking coming soon
+          </p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <div className="container mx-auto p-6 space-y-8 animate-fade-in">
@@ -138,7 +377,7 @@ export default function BetTracker() {
             <div className="hidden md:flex items-center gap-6 relative z-10">
               <div className="text-right">
                 <p className="text-sm text-foreground/70 font-body">Demo ROI</p>
-                <p className="text-2xl font-heading font-bold text-success">+{mockStats.roi}%</p>
+                <p className="text-2xl font-heading font-bold text-success">+{kpiData.roi}%</p>
               </div>
               <div className="text-6xl opacity-20 text-accent/30">📊</div>
             </div>
@@ -147,228 +386,262 @@ export default function BetTracker() {
         </CardContent>
       </Card>
 
-      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview" className="gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="bets" className="gap-2">
-            <Target className="h-4 w-4" />
-            My Bets
-          </TabsTrigger>
-          <TabsTrigger value="analytics" className="gap-2">
-            <Trophy className="h-4 w-4" />
-            Analytics
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-6 mt-6">
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="p-4 text-center">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Total Bets</p>
-                <p className="text-2xl font-bold">{mockStats.totalBets}</p>
-              </div>
-            </Card>
-            <Card className="p-4 text-center">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Hit Rate</p>
-                <p className="text-2xl font-bold text-accent">{mockStats.hitRate}%</p>
-              </div>
-            </Card>
-            <Card className="p-4 text-center">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Total Wagered</p>
-                <p className="text-2xl font-bold">${mockStats.totalWagered}</p>
-              </div>
-            </Card>
-            <Card className="p-4 text-center">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">ROI</p>
-                <p className="text-2xl font-bold text-success">+{mockStats.roi}%</p>
-              </div>
-            </Card>
+      {/* Portfolio Header */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="p-4 text-center bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <div className="space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <TrendingUp className="h-4 w-4 text-success" />
+              <p className="text-sm font-body text-muted-foreground">ROI</p>
+            </div>
+            <p className="text-2xl font-heading font-bold text-success">+{kpiData.roi}%</p>
           </div>
+        </Card>
+        <Card className="p-4 text-center bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <div className="space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <Target className="h-4 w-4 text-accent" />
+              <p className="text-sm font-body text-muted-foreground">Hit Rate</p>
+            </div>
+            <p className="text-2xl font-heading font-bold text-accent">{kpiData.hitRate}%</p>
+          </div>
+        </Card>
+        <Card className="p-4 text-center bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <div className="space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <Clock className="h-4 w-4 text-warning" />
+              <p className="text-sm font-body text-muted-foreground">Open Slips</p>
+            </div>
+            <p className="text-2xl font-heading font-bold text-warning">{kpiData.openSlips}</p>
+          </div>
+        </Card>
+        <Card className="p-4 text-center bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <div className="space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <BarChart3 className="h-4 w-4 text-secondary" />
+              <p className="text-sm font-body text-muted-foreground">Total Bets</p>
+            </div>
+            <p className="text-2xl font-heading font-bold text-secondary">{kpiData.totalBets}</p>
+          </div>
+        </Card>
+      </div>
 
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-accent" />
-                Recent Bets
-              </CardTitle>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add New Bet
+      {/* Date Range Selector */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 rounded-xl bg-muted p-1 border border-accent/30">
+            {["7D", "30D", "YTD"].map((range) => (
+              <Button
+                key={range}
+                variant={selectedDateRange === range ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setSelectedDateRange(range)}
+                className={`h-8 px-4 text-xs font-heading font-medium ${
+                  selectedDateRange === range ? "bg-accent text-accent-foreground" : ""
+                }`}
+              >
+                {range}
               </Button>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {mockBets.slice(0, 3).map((bet) => (
-                <div key={bet.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-4">
-                    {getStatusIcon(bet.status)}
-                    <div>
-                      <p className="font-semibold">{bet.player} • {bet.market}</p>
-                      <p className="text-sm text-muted-foreground">{bet.line} • ${bet.stake} @ {formatOdds(bet.odds)}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <Badge variant="outline" className={getStatusColor(bet.status)}>
-                      {bet.status.charAt(0).toUpperCase() + bet.status.slice(1)}
-                    </Badge>
-                    <p className="text-sm text-muted-foreground mt-1">{bet.gameTime}</p>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="bets" className="space-y-6 mt-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">All Bets</h2>
-            <Button className="gap-2 bg-gradient-accent hover:bg-accent-hover">
-              <Plus className="h-4 w-4" />
-              Add New Bet
-            </Button>
-          </div>
-
-          <div className="space-y-4">
-            {mockBets.map((bet) => (
-              <Card key={bet.id} className="hover:bg-card-hover transition-colors">
-                <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
-                    <div className="md:col-span-2">
-                      <div className="flex items-center gap-2">
-                        {getStatusIcon(bet.status)}
-                        <div>
-                          <p className="font-bold">{bet.player}</p>
-                          <p className="text-sm text-muted-foreground">{bet.market} {bet.line}</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <p className="text-sm text-muted-foreground">Stake</p>
-                      <p className="font-semibold">${bet.stake}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-sm text-muted-foreground">Odds</p>
-                      <p className="font-semibold">{formatOdds(bet.odds)}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-sm text-muted-foreground">Book</p>
-                      <p className="font-semibold">{bet.book}</p>
-                    </div>
-                    
-                    <div className="text-right">
-                      <Badge variant="outline" className={getStatusColor(bet.status)}>
-                        {bet.status.charAt(0).toUpperCase() + bet.status.slice(1)}
-                      </Badge>
-                      {bet.payout && (
-                        <p className={`text-sm mt-1 font-medium ${
-                          bet.status === "won" ? "text-success" : "text-destructive"
-                        }`}>
-                          {bet.status === "won" ? `+$${bet.payout}` : `-$${bet.stake}`}
-                        </p>
-                      )}
-                      {bet.status === "scheduled" && (
-                        <p className="text-sm mt-1 text-muted-foreground">
-                          To win: ${calculatePotentialPayout(bet.stake, bet.odds).toFixed(2)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             ))}
           </div>
-        </TabsContent>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowEmpty(!showEmpty)}
+            className="gap-2 border-accent/30 hover:bg-accent/10"
+          >
+            {showEmpty ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+            {showEmpty ? "Show Bets" : "View Empty State"}
+          </Button>
+        </div>
+        <AddBetModal />
+      </div>
 
-        <TabsContent value="analytics" className="space-y-6 mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-accent" />
-                  Performance Metrics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Win Rate</span>
-                    <span className="font-semibold">{mockStats.hitRate}%</span>
-                  </div>
-                  <Progress value={mockStats.hitRate} className="h-2" />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="p-3 rounded-lg bg-success/10">
-                    <p className="text-2xl font-bold text-success">{mockStats.wonBets}</p>
-                    <p className="text-xs text-success">Won</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-destructive/10">
-                    <p className="text-2xl font-bold text-destructive">{mockStats.lostBets}</p>
-                    <p className="text-xs text-destructive">Lost</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+      {/* Mini Charts Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-sm font-heading font-semibold text-foreground tracking-tight">
+              ROI Trend (30D)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TrendlineChart data={[8, 12, 10, 15, 18, 14, 12.4]} />
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-sm font-heading font-semibold text-foreground tracking-tight">
+              Weekly W/L
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BarChart />
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-sm font-heading font-semibold text-foreground tracking-tight">
+              Market Mix
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DonutChart />
+          </CardContent>
+        </Card>
+      </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-accent" />
-                  Financial Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Wagered</span>
-                    <span className="font-semibold">${mockStats.totalWagered}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Won</span>
-                    <span className="font-semibold text-success">${mockStats.totalWon}</span>
-                  </div>
-                  <div className="flex justify-between border-t pt-3">
-                    <span className="font-medium">Net Profit</span>
-                    <span className="font-bold text-success">+${(mockStats.totalWon - mockStats.totalWagered).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">ROI</span>
-                    <span className="font-bold text-success">+{mockStats.roi}%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Additional Analytics Placeholder */}
-          <Card className="bg-gradient-surface border-accent/20">
-            <CardContent className="p-8 text-center space-y-4">
-              <div className="p-4 rounded-full bg-gradient-accent w-16 h-16 mx-auto flex items-center justify-center">
-                <BarChart3 className="h-8 w-8 text-white" />
+      {showEmpty ? (
+        /* Empty State */
+        <Card className="bg-gradient-surface border-accent/20 rounded-2xl shadow-xl">
+          <CardContent className="p-12 text-center space-y-6">
+            <div className="space-y-4">
+              <div className="p-4 rounded-full bg-accent/20 w-20 h-20 mx-auto flex items-center justify-center">
+                <Trophy className="h-10 w-10 text-accent" />
               </div>
               <div>
-                <h3 className="text-xl font-bold mb-2">Advanced Analytics</h3>
-                <p className="text-muted-foreground max-w-md mx-auto">
-                  Detailed market analysis, prop type performance, and predictive insights coming soon.
+                <h3 className="text-2xl font-heading font-bold mb-2 text-foreground">Start Your Journey</h3>
+                <p className="text-muted-foreground text-lg max-w-md mx-auto font-body">
+                  Track your bets here and watch your analytics grow. Add your first slip from the Prop Builder or manually enter your positions.
                 </p>
               </div>
-              <Badge variant="secondary" className="text-sm py-2 px-4">
-                🚀 Enhanced features in development
-              </Badge>
+            </div>
+            <div className="flex gap-4 justify-center">
+              <AddBetModal />
+              <Button variant="outline" className="border-accent/30 hover:bg-accent/10">
+                <Target className="h-4 w-4 mr-2" />
+                Build a Prop
+              </Button>
+            </div>
+            <Badge variant="secondary" className="text-sm py-2 px-4">
+              🚀 Demo mode - Your real bets will appear here
+            </Badge>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {/* Filters Bar */}
+          <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+            <CardContent className="p-4">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-4 w-4 text-accent" />
+                  <span className="text-sm font-heading font-medium text-foreground">Filters:</span>
+                </div>
+                <Select value={selectedLeague} onValueChange={setSelectedLeague}>
+                  <SelectTrigger className="w-[120px] bg-background border-accent/30">
+                    <SelectValue placeholder="League" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Leagues</SelectItem>
+                    <SelectItem value="NFL">NFL</SelectItem>
+                    <SelectItem value="NBA">NBA</SelectItem>
+                    <SelectItem value="MLB">MLB</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                  <SelectTrigger className="w-[120px] bg-background border-accent/30">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="won">Won</SelectItem>
+                    <SelectItem value="lost">Lost</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="push">Push</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="flex-1 max-w-xs">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input 
+                      placeholder="Search bets..." 
+                      className="pl-10 bg-background border-accent/30"
+                    />
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
+
+          {/* Bet Cards Grid */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-heading font-semibold text-foreground tracking-tight">
+                Your Bets ({filteredBets.length})
+              </h2>
+            </div>
+            
+            <div className="space-y-4">
+              {filteredBets.map((bet) => (
+                <Card key={bet.id} className="hover:bg-card-hover transition-all duration-200 hover:shadow-xl hover:shadow-accent/10 hover:border-accent/30 bg-gradient-card border-accent/20 rounded-2xl">
+                  <CardContent className="p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                      {/* Bet Info */}
+                      <div className="lg:col-span-4 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <LeagueBadge league={bet.league} />
+                          <StatusBadge status={bet.status} />
+                        </div>
+                        <h3 className="font-heading font-bold text-lg text-foreground">{bet.title}</h3>
+                        <p className="text-sm text-muted-foreground font-body">{bet.book} • {bet.date}</p>
+                      </div>
+
+                      {/* Performance */}
+                      <div className="lg:col-span-3">
+                        <p className="text-xs text-muted-foreground mb-2 font-body">Recent performance</p>
+                        <div className="h-12">
+                          <TrendlineChart data={bet.sparkline.slice(-7)} className="h-12" />
+                        </div>
+                      </div>
+
+                      {/* Stakes & Odds */}
+                      <div className="lg:col-span-2 space-y-1">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Stake:</span>
+                          <span className="font-semibold font-body">${bet.stake}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Odds:</span>
+                          <span className="font-semibold font-body">{formatOdds(bet.odds)}</span>
+                        </div>
+                        {bet.confidence && (
+                          <div className="flex justify-between">
+                            <span className="text-sm text-muted-foreground">AI:</span>
+                            <ConfidenceBadge confidence={bet.confidence} className="text-xs" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Result & Actions */}
+                      <div className="lg:col-span-3 text-right space-y-2">
+                        {bet.result && (
+                          <p className="text-sm text-muted-foreground font-body">
+                            Result: <span className="text-foreground font-medium">{bet.result}</span>
+                          </p>
+                        )}
+                        {bet.payout && (
+                          <p className={`font-bold ${
+                            bet.status === "won" ? "text-success" : "text-destructive"
+                          }`}>
+                            {bet.status === "won" ? `+$${bet.payout}` : `-$${bet.stake}`}
+                          </p>
+                        )}
+                        {bet.status === "pending" && (
+                          <p className="text-sm text-muted-foreground font-body">
+                            To win: ${calculatePotentialPayout(bet.stake, bet.odds).toFixed(2)}
+                          </p>
+                        )}
+                        <BetDetailSheet bet={bet} />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
