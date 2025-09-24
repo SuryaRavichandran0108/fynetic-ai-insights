@@ -1,0 +1,113 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { 
+  BarChart3, 
+  Search, 
+  MessageSquare, 
+  Target, 
+  TrendingUp, 
+  Settings,
+  Calendar,
+  Filter
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface HeaderProps {
+  currentPage: string;
+  onPageChange: (page: string) => void;
+}
+
+export function Header({ currentPage, onPageChange }: HeaderProps) {
+  const [selectedLeague, setSelectedLeague] = useState("NFL");
+  const [selectedDateScope, setSelectedDateScope] = useState("Today");
+
+  const navigationItems = [
+    { id: "dashboard", label: "Dashboard", icon: BarChart3 },
+    { id: "research", label: "Research", icon: Search },
+    { id: "prop-builder", label: "Prop Builder", icon: Target },
+    { id: "ask-fynetic", label: "Ask FYNETIC", icon: MessageSquare },
+    { id: "bet-tracker", label: "Bet Tracker", icon: TrendingUp },
+    { id: "admin", label: "Admin", icon: Settings },
+  ];
+
+  const leagues = ["NFL", "NBA", "MLB"];
+  const dateScopes = ["Today", "Next 3 Days", "This Week"];
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* Compliance Banner */}
+      <div className="bg-warning/10 border-b border-warning/20 px-4 py-2 text-center">
+        <p className="text-sm text-warning-foreground">
+          <strong>FYNETIC</strong> provides informational insights, not betting advice.
+        </p>
+      </div>
+
+      <div className="container flex h-16 items-center justify-between">
+        {/* Logo and League Selector */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <BarChart3 className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              FYNETIC
+            </span>
+          </div>
+
+          {/* League Selector */}
+          <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+            {leagues.map((league) => (
+              <Button
+                key={league}
+                variant={selectedLeague === league ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setSelectedLeague(league)}
+                className="h-8 px-3 text-xs font-medium"
+              >
+                {league}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Button
+                key={item.id}
+                variant={currentPage === item.id ? "default" : "ghost"}
+                size="sm"
+                onClick={() => onPageChange(item.id)}
+                className="gap-2"
+              >
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </Button>
+            );
+          })}
+        </nav>
+
+        {/* Date Scope Selector */}
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+            {dateScopes.map((scope) => (
+              <Button
+                key={scope}
+                variant={selectedDateScope === scope ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setSelectedDateScope(scope)}
+                className="h-8 px-3 text-xs"
+              >
+                {scope}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
