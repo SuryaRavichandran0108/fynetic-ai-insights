@@ -1,0 +1,143 @@
+/* Use system font as fallback for Eightgon since custom font files aren't available */
+@font-face {
+  font-family: "Eightgon";
+  src: local("Arial Black"), local("Helvetica"), system-ui;
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  /* Core brand colors */
+  --bg: 222 42% 8%;              /* #0B0F19 deep navy charcoal */
+  --surface: 217 19% 15%;        /* #1A2233 slate card */
+  --surface-2: 218 25% 12%;      /* #141B29 deeper panel/header */
+  --border: 217 19% 23%;         /* #2C3445 */
+
+  --text-primary: 213 27% 94%;   /* #F1F5F9 warm off-white */
+  --text-secondary: 214 15% 59%; /* #94A3B8 */
+  --text-muted: 214 32% 36%;     /* #64748B */
+
+  --brand-teal: 174 100% 39%;    /* #00C6AE CYBER TEAL (hero) */
+  --brand-blue: 217 91% 60%;     /* #2563EB electric blue (secondary) */
+
+  --positive: 142 71% 45%;       /* #22C55E emerald */
+  --negative: 0 84% 60%;         /* #EF4444 soft red */
+  --warning: 43 96% 56%;         /* #F59E0B amber (sparingly) */
+
+  /* Gradients */
+  --grad-hero: linear-gradient(135deg, hsl(220 42% 11%) 0%, hsl(218 25% 20%) 60%, hsl(217 91% 60%) 100%);
+  --grad-cta: linear-gradient(135deg, hsl(174 100% 39%) 0%, hsl(174 100% 45%) 100%);
+
+  /* Elevation */
+  --shadow-card: 0 8px 28px rgba(0,0,0,0.35);
+  --ring: 0 0 0 6px rgba(0,198,174,0.18);
+
+  /* Typography */
+  --font-heading: "Eightgon", system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Hard reset for background & base text */
+html, body {
+  background: hsl(var(--bg));
+  color: hsl(var(--text-primary));
+  font-family: var(--font-body);
+}
+
+/* Global Component Styles */
+
+/* Cards & panels */
+.fy-card {
+  background: hsl(var(--surface));
+  border: 1px solid hsl(var(--border));
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* Primary button */
+.fy-btn {
+  background: var(--grad-cta);
+  color: hsl(var(--bg));
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-weight: 600;
+  transition: 200ms ease;
+  font-family: var(--font-body);
+}
+.fy-btn:hover { 
+  box-shadow: 0 8px 24px rgba(0,198,174,0.35); 
+  transform: translateY(-1px);
+}
+
+/* Secondary button */
+.fy-btn-secondary {
+  background: rgba(37, 99, 235, 0.12);
+  color: hsl(var(--text-primary));
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-weight: 600;
+  transition: 200ms ease;
+  font-family: var(--font-body);
+}
+
+/* Badges */
+.fy-badge { 
+  border-radius: 999px; 
+  padding: 0.25rem 0.6rem; 
+  font-weight: 600; 
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+}
+.fy-badge--won { 
+  background: rgba(34,197,94,0.18); 
+  color: hsl(142 71% 65%); 
+  border: 1px solid rgba(34,197,94,0.3);
+}
+.fy-badge--lost { 
+  background: rgba(239,68,68,0.18); 
+  color: hsl(0 84% 70%); 
+  border: 1px solid rgba(239,68,68,0.3);
+}
+.fy-badge--pending { 
+  background: rgba(148,163,184,0.18); 
+  color: hsl(214 15% 75%); 
+  border: 1px solid rgba(148,163,184,0.3);
+}
+
+/* Hero section */
+.fy-hero { 
+  background: var(--grad-hero); 
+  border-radius: 1.5rem; 
+  box-shadow: var(--shadow-card); 
+}
+
+/* Links & focus */
+a { color: hsl(var(--brand-blue)); }
+a:hover { color: hsl(var(--brand-teal)); }
+:focus-visible { 
+  outline: none; 
+  box-shadow: var(--ring); 
+  border-radius: 8px; 
+}
+
+/* Typography */
+.h1, h1, .nav-title { 
+  font-family: var(--font-heading); 
+  letter-spacing: 0.3px; 
+  font-weight: 700;
+  color: hsl(var(--text-primary));
+}
+.h2, h2 { 
+  font-family: var(--font-heading); 
+  font-weight: 600;
+  color: hsl(var(--text-primary));
+}
+.h3, h3 { 
+  font-family: var(--font-heading); 
+  font-weight: 600;
+  color: hsl(var(--text-primary));
+}
+body, p, span, li, input, button { 
+  font-family: var(--font-body); 
+}

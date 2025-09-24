@@ -137,7 +137,7 @@ export default {
       },
       backgroundImage: {
         "gradient-primary": "var(--gradient-primary)",
-        "gradient-accent": "var(--gradient-accent)",
+        "gradient-accent": "linear-gradient(135deg, hsl(174 100% 39%), hsl(217 91% 60%))",
         "gradient-surface": "var(--gradient-surface)",
         "gradient-card": "var(--gradient-card)",
       },
