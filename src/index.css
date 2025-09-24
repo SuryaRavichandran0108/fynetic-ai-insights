@@ -2,75 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* FYNETIC Sports Analytics Design System - Modern Professional
+/* FYNETIC Sports Analytics Design System - Elegant Dark
 All colors MUST be HSL format for proper theming.
 */
 
 @layer base {
   :root {
-    /* Modern Typography */
-    --font-heading: 'Poppins', system-ui, sans-serif;
+    /* Elegant Typography */
+    --font-heading: 'DM Sans', system-ui, sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
 
-    /* Core Brand Colors - Professional Navy & Electric Blue */
-    --background: 210 20% 98%;
-    --foreground: 220 39% 11%;
+    /* Elegant Dark Theme - Charcoal Navy Base */
+    --background: 222 42% 8%;     /* Deep charcoal navy #0B0F19 */
+    --foreground: 213 27% 94%;    /* Warm off-white #F1F5F9 */
 
-    /* Card System - Clean whites with subtle shadows */
-    --card: 0 0% 100%;
-    --card-foreground: 220 39% 11%;
-    --card-hover: 210 20% 96%;
+    /* Card System - Soft slate surfaces */
+    --card: 217 19% 15%;          /* Soft slate gray #1A2233 */
+    --card-foreground: 213 27% 94%;
+    --card-hover: 217 19% 18%;
 
     /* Interactive Elements */
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 39% 11%;
+    --popover: 217 19% 15%;
+    --popover-foreground: 213 27% 94%;
 
-    /* Primary Brand - Deep Navy */
-    --primary: 220 39% 11%;
-    --primary-foreground: 0 0% 98%;
-    --primary-hover: 220 45% 8%;
+    /* Primary - Electric Blue */
+    --primary: 217 91% 60%;       /* Electric blue #3B82F6 */
+    --primary-foreground: 213 27% 94%;
+    --primary-hover: 217 91% 55%;
 
     /* Electric Blue Accent */
-    --accent: 221 83% 53%;
-    --accent-foreground: 0 0% 98%;
-    --accent-hover: 221 83% 48%;
+    --accent: 217 91% 60%;        /* Electric blue #3B82F6 */
+    --accent-foreground: 213 27% 94%;
+    --accent-hover: 217 91% 55%;
 
-    /* Mint/Teal Secondary */
-    --secondary: 172 66% 50%;
-    --secondary-foreground: 0 0% 98%;
-    --secondary-hover: 172 66% 45%;
+    /* Teal Mint Secondary */
+    --secondary: 174 72% 56%;     /* Teal mint #2DD4BF */
+    --secondary-foreground: 222 42% 8%;
+    --secondary-hover: 174 72% 51%;
 
     /* Muted elements */
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 13% 34%;
+    --muted: 217 19% 18%;
+    --muted-foreground: 214 15% 59%; /* Muted gray #94A3B8 */
 
-    /* Status Colors - Professional palette */
-    --success: 142 69% 58%;
-    --success-foreground: 0 0% 98%;
+    /* Status Colors - Elegant palette */
+    --success: 142 71% 45%;       /* Emerald #22C55E */
+    --success-foreground: 213 27% 94%;
     --warning: 43 96% 56%;
-    --warning-foreground: 220 39% 11%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --warning-foreground: 222 42% 8%;
+    --destructive: 0 84% 60%;     /* Soft red #EF4444 */
+    --destructive-foreground: 213 27% 94%;
     --live: 0 84% 60%;
-    --live-foreground: 0 0% 98%;
+    --live-foreground: 213 27% 94%;
 
-    /* Borders and inputs */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 221 83% 53%;
+    /* Borders and inputs - Subtle slate */
+    --border: 217 19% 23%;        /* Subtle slate #2C3445 */
+    --input: 217 19% 23%;
+    --ring: 217 91% 60%;
 
-    /* Modern Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(220 39% 11%), hsl(221 83% 53%));
-    --gradient-accent: linear-gradient(135deg, hsl(221 83% 53%), hsl(172 66% 50%));
-    --gradient-surface: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 20% 98%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 20% 99%));
+    /* Elegant Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(217 91% 60%));
+    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(174 72% 56%));
+    --gradient-surface: linear-gradient(180deg, hsl(217 19% 15%), hsl(222 42% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
     
-    /* Data Visualization - Bright accents */
-    --chart-1: 221 83% 53%;
-    --chart-2: 172 66% 50%;
-    --chart-3: 142 69% 58%;
-    --chart-4: 43 96% 56%;
-    --chart-5: 262 83% 58%;
+    /* Data Visualization - Bright on dark */
+    --chart-1: 217 91% 60%;       /* Electric blue */
+    --chart-2: 174 72% 56%;       /* Teal mint */
+    --chart-3: 142 71% 45%;       /* Emerald */
+    --chart-4: 43 96% 56%;        /* Warning yellow */
+    --chart-5: 262 83% 58%;       /* Purple */
 
     --radius: 1rem;
 
@@ -92,49 +92,49 @@ All colors MUST be HSL format for proper theming.
   }
 
   .dark {
-    /* Dark Mode - Professional Dark Theme */
-    --background: 220 39% 6%;
-    --foreground: 210 20% 95%;
+    /* Dark Mode uses same elegant dark theme */
+    --background: 222 42% 8%;
+    --foreground: 213 27% 94%;
 
-    --card: 220 39% 8%;
-    --card-foreground: 210 20% 95%;
-    --card-hover: 220 39% 10%;
+    --card: 217 19% 15%;
+    --card-foreground: 213 27% 94%;
+    --card-hover: 217 19% 18%;
 
-    --popover: 220 39% 8%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 217 19% 15%;
+    --popover-foreground: 213 27% 94%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 220 39% 6%;
-    --primary-hover: 221 83% 48%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 213 27% 94%;
+    --primary-hover: 217 91% 55%;
 
-    --accent: 221 83% 53%;
-    --accent-foreground: 220 39% 6%;
-    --accent-hover: 221 83% 48%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 213 27% 94%;
+    --accent-hover: 217 91% 55%;
 
-    --secondary: 172 66% 50%;
-    --secondary-foreground: 220 39% 6%;
-    --secondary-hover: 172 66% 45%;
+    --secondary: 174 72% 56%;
+    --secondary-foreground: 222 42% 8%;
+    --secondary-hover: 174 72% 51%;
 
-    --muted: 220 39% 10%;
-    --muted-foreground: 215 13% 65%;
+    --muted: 217 19% 18%;
+    --muted-foreground: 214 15% 59%;
 
-    --success: 142 69% 58%;
-    --success-foreground: 220 39% 6%;
+    --success: 142 71% 45%;
+    --success-foreground: 213 27% 94%;
     --warning: 43 96% 56%;
-    --warning-foreground: 220 39% 6%;
+    --warning-foreground: 222 42% 8%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 95%;
+    --destructive-foreground: 213 27% 94%;
     --live: 0 84% 60%;
-    --live-foreground: 210 20% 95%;
+    --live-foreground: 213 27% 94%;
 
-    --border: 220 39% 15%;
-    --input: 220 39% 15%;
-    --ring: 221 83% 53%;
+    --border: 217 19% 23%;
+    --input: 217 19% 23%;
+    --ring: 217 91% 60%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(220 39% 6%), hsl(220 39% 12%));
-    --gradient-accent: linear-gradient(135deg, hsl(221 83% 53%), hsl(172 66% 50%));
-    --gradient-surface: linear-gradient(180deg, hsl(220 39% 8%), hsl(220 39% 6%));
-    --gradient-card: linear-gradient(145deg, hsl(220 39% 8%), hsl(220 39% 10%));
+    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(217 91% 60%));
+    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(174 72% 56%));
+    --gradient-surface: linear-gradient(180deg, hsl(217 19% 15%), hsl(222 42% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
   }
 }
 
@@ -151,6 +151,7 @@ All colors MUST be HSL format for proper theming.
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 600;
+    letter-spacing: -0.025em;
   }
 
   .text-heading {

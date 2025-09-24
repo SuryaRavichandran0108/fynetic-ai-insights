@@ -38,11 +38,11 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
   const dateScopes = ["Today", "Next 3 Days", "This Week"];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Compliance Banner */}
-      <div className="bg-warning/10 border-b border-warning/20 px-4 py-2 text-center">
-        <p className="text-sm text-warning-foreground">
-          <strong>FYNETIC</strong> provides informational insights, not betting advice.
+      <div className="bg-warning/20 border-b border-warning/30 px-4 py-2 text-center">
+        <p className="text-sm text-foreground font-body">
+          <strong className="font-heading">FYNETIC</strong> provides informational insights, not betting advice.
         </p>
       </div>
 
@@ -50,23 +50,23 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
         {/* Logo and League Selector */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+            <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-lg">
               <BarChart3 className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent font-heading tracking-tight">
               FYNETIC
             </span>
           </div>
 
           {/* League Selector */}
-          <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+          <div className="flex items-center gap-1 rounded-lg bg-muted p-1 border border-border">
             {leagues.map((league) => (
               <Button
                 key={league}
                 variant={selectedLeague === league ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setSelectedLeague(league)}
-                className="h-8 px-3 text-xs font-medium"
+                className="h-8 px-3 text-xs font-medium font-heading tracking-tight"
               >
                 {league}
               </Button>
@@ -84,7 +84,7 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
                 variant={currentPage === item.id ? "default" : "ghost"}
                 size="sm"
                 onClick={() => onPageChange(item.id)}
-                className="gap-2"
+                className="gap-2 font-body hover:bg-accent/10"
               >
                 <Icon className="h-4 w-4" />
                 {item.label}
@@ -97,7 +97,7 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
         <div className="flex items-center gap-4">
           {/* Advanced Mode Toggle */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-muted-foreground font-body">
               {isAdvanced ? "Advanced" : "Simple"}
             </span>
             <Switch
@@ -109,14 +109,14 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
           {/* Date Scope Selector */}
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+            <div className="flex items-center gap-1 rounded-lg bg-muted p-1 border border-border">
               {dateScopes.map((scope) => (
                 <Button
                   key={scope}
                   variant={selectedDateScope === scope ? "secondary" : "ghost"}
                   size="sm"
                   onClick={() => setSelectedDateScope(scope)}
-                  className="h-8 px-3 text-xs"
+                  className="h-8 px-3 text-xs font-body"
                 >
                   {scope}
                 </Button>
