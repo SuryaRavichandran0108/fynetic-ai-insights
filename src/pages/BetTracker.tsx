@@ -121,28 +121,29 @@ export default function BetTracker() {
   return (
     <div className="container mx-auto p-6 space-y-8 animate-fade-in">
       {/* Hero Header */}
-      <Card className="bg-gradient-surface border-accent/20">
-        <CardContent className="p-8">
-          <div className="flex items-center justify-between">
-            <div className="space-y-3">
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-accent">
-                  <TrendingUp className="h-6 w-6 text-white" />
+      <Card className="bg-gradient-primary border-0 text-foreground shadow-2xl rounded-2xl overflow-hidden">
+        <CardContent className="p-8 relative">
+          <div className="flex items-center justify-between relative z-10">
+            <div className="space-y-4">
+              <h1 className="text-3xl font-heading font-bold flex items-center gap-3 text-foreground tracking-tight">
+                <div className="p-3 rounded-2xl bg-accent/20 backdrop-blur-sm shadow-lg">
+                  <TrendingUp className="h-6 w-6 text-accent" />
                 </div>
                 Bet Tracker
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl">
+              <p className="text-foreground/90 text-lg max-w-2xl font-body">
                 Track your betting performance, analyze your results, and stay on top of your wagering with detailed insights and ROI tracking.
               </p>
             </div>
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-6 relative z-10">
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Demo ROI</p>
-                <p className="text-2xl font-bold text-success">+{mockStats.roi}%</p>
+                <p className="text-sm text-foreground/70 font-body">Demo ROI</p>
+                <p className="text-2xl font-heading font-bold text-success">+{mockStats.roi}%</p>
               </div>
-              <div className="text-6xl opacity-20">📊</div>
+              <div className="text-6xl opacity-20 text-accent/30">📊</div>
             </div>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-secondary/10 pointer-events-none" />
         </CardContent>
       </Card>
 

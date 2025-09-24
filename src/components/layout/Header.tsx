@@ -53,7 +53,7 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
             <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-lg">
               <BarChart3 className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent font-heading tracking-tight">
+            <span className="text-xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent font-heading tracking-tight">
               FYNETIC
             </span>
           </div>

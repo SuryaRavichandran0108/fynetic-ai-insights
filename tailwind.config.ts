@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['DM Sans', 'var(--font-heading)'],
+        heading: ['Orbitron', 'var(--font-heading)'],
         body: ['Inter', 'var(--font-body)'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },

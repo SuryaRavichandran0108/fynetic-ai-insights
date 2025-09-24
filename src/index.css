@@ -2,22 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* FYNETIC Sports Analytics Design System - Elegant Dark
+/* FYNETIC Sports Analytics Design System - Elegant Dark with Cyber Teal
 All colors MUST be HSL format for proper theming.
 */
 
 @layer base {
   :root {
-    /* Elegant Typography */
-    --font-heading: 'DM Sans', system-ui, sans-serif;
+    /* Premium Typography */
+    --font-heading: 'Orbitron', system-ui, sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
 
-    /* Elegant Dark Theme - Charcoal Navy Base */
-    --background: 222 42% 8%;     /* Deep charcoal navy #0B0F19 */
+    /* Elegant Dark Theme - Deep Navy Charcoal Base */
+    --background: 222 42% 8%;     /* Deep Navy Charcoal #0B0F19 */
     --foreground: 213 27% 94%;    /* Warm off-white #F1F5F9 */
 
     /* Card System - Soft slate surfaces */
-    --card: 217 19% 15%;          /* Soft slate gray #1A2233 */
+    --card: 217 19% 15%;          /* Slate Gray #1A2233 */
     --card-foreground: 213 27% 94%;
     --card-hover: 217 19% 18%;
 
@@ -25,20 +25,20 @@ All colors MUST be HSL format for proper theming.
     --popover: 217 19% 15%;
     --popover-foreground: 213 27% 94%;
 
-    /* Primary - Electric Blue */
-    --primary: 217 91% 60%;       /* Electric blue #3B82F6 */
+    /* Hero Brand Accent - Cyber Teal */
+    --primary: 174 96% 39%;       /* Cyber Teal #00C6AE */
     --primary-foreground: 213 27% 94%;
-    --primary-hover: 217 91% 55%;
+    --primary-hover: 174 96% 34%;
 
-    /* Electric Blue Accent */
-    --accent: 217 91% 60%;        /* Electric blue #3B82F6 */
+    /* Cyber Teal Accent */
+    --accent: 174 96% 39%;        /* Cyber Teal #00C6AE */
     --accent-foreground: 213 27% 94%;
-    --accent-hover: 217 91% 55%;
+    --accent-hover: 174 96% 34%;
 
-    /* Teal Mint Secondary */
-    --secondary: 174 72% 56%;     /* Teal mint #2DD4BF */
-    --secondary-foreground: 222 42% 8%;
-    --secondary-hover: 174 72% 51%;
+    /* Electric Blue Secondary */
+    --secondary: 217 91% 60%;     /* Electric Blue #2563EB */
+    --secondary-foreground: 213 27% 94%;
+    --secondary-hover: 217 91% 55%;
 
     /* Muted elements */
     --muted: 217 19% 18%;
@@ -59,15 +59,15 @@ All colors MUST be HSL format for proper theming.
     --input: 217 19% 23%;
     --ring: 217 91% 60%;
 
-    /* Elegant Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(217 91% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(174 72% 56%));
+    /* Premium Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(174 96% 39%));
+    --gradient-accent: linear-gradient(135deg, hsl(174 96% 39%), hsl(217 91% 60%));
     --gradient-surface: linear-gradient(180deg, hsl(217 19% 15%), hsl(222 42% 8%));
     --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
     
-    /* Data Visualization - Bright on dark */
-    --chart-1: 217 91% 60%;       /* Electric blue */
-    --chart-2: 174 72% 56%;       /* Teal mint */
+    /* Data Visualization - Cyber themed */
+    --chart-1: 174 96% 39%;       /* Cyber Teal */
+    --chart-2: 217 91% 60%;       /* Electric Blue */
     --chart-3: 142 71% 45%;       /* Emerald */
     --chart-4: 43 96% 56%;        /* Warning yellow */
     --chart-5: 262 83% 58%;       /* Purple */
@@ -92,7 +92,7 @@ All colors MUST be HSL format for proper theming.
   }
 
   .dark {
-    /* Dark Mode uses same elegant dark theme */
+    /* Dark Mode maintains consistent cyber-teal theme */
     --background: 222 42% 8%;
     --foreground: 213 27% 94%;
 
@@ -103,17 +103,17 @@ All colors MUST be HSL format for proper theming.
     --popover: 217 19% 15%;
     --popover-foreground: 213 27% 94%;
 
-    --primary: 217 91% 60%;
+    --primary: 174 96% 39%;
     --primary-foreground: 213 27% 94%;
-    --primary-hover: 217 91% 55%;
+    --primary-hover: 174 96% 34%;
 
-    --accent: 217 91% 60%;
+    --accent: 174 96% 39%;
     --accent-foreground: 213 27% 94%;
-    --accent-hover: 217 91% 55%;
+    --accent-hover: 174 96% 34%;
 
-    --secondary: 174 72% 56%;
-    --secondary-foreground: 222 42% 8%;
-    --secondary-hover: 174 72% 51%;
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 213 27% 94%;
+    --secondary-hover: 217 91% 55%;
 
     --muted: 217 19% 18%;
     --muted-foreground: 214 15% 59%;
@@ -131,8 +131,8 @@ All colors MUST be HSL format for proper theming.
     --input: 217 19% 23%;
     --ring: 217 91% 60%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(217 91% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%), hsl(174 72% 56%));
+    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(174 96% 39%));
+    --gradient-accent: linear-gradient(135deg, hsl(174 96% 39%), hsl(217 91% 60%));
     --gradient-surface: linear-gradient(180deg, hsl(217 19% 15%), hsl(222 42% 8%));
     --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
   }

@@ -289,45 +289,46 @@ export default function PropBuilder() {
   return (
     <div className="container mx-auto p-6 space-y-8 animate-fade-in">
       {/* Hero Header */}
-      <Card className="bg-gradient-surface border-accent/20">
-        <CardContent className="p-8">
-          <div className="flex items-center justify-between">
-            <div className="space-y-3">
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-accent">
-                  <Target className="h-6 w-6 text-white" />
+      <Card className="bg-gradient-primary border-0 text-foreground shadow-2xl rounded-2xl overflow-hidden">
+        <CardContent className="p-8 relative">
+          <div className="flex items-center justify-between relative z-10">
+            <div className="space-y-4">
+              <h1 className="text-3xl font-heading font-bold flex items-center gap-3 text-foreground tracking-tight">
+                <div className="p-3 rounded-2xl bg-accent/20 backdrop-blur-sm shadow-lg">
+                  <Target className="h-6 w-6 text-accent" />
                 </div>
                 Prop Builder
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl">
+              <p className="text-foreground/90 text-lg max-w-2xl font-body">
                 Build winning propositions with AI-powered analysis. Follow our guided steps to analyze any player prop with confidence.
               </p>
             </div>
-            <div className="hidden md:block text-6xl opacity-20">
+            <div className="hidden md:block text-6xl opacity-20 text-accent/30">
               🎯
             </div>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-secondary/10 pointer-events-none" />
         </CardContent>
       </Card>
 
       {/* Progress Steps */}
-      <Card className="border-accent/20 bg-gradient-surface">
+      <Card className="border-accent/30 bg-gradient-card rounded-2xl shadow-xl">
         <CardContent className="p-6">
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-center">Build Your Prop in 4 Simple Steps</h2>
+            <h2 className="text-lg font-heading font-semibold text-center text-foreground tracking-tight">Build Your Prop in 4 Simple Steps</h2>
             <div className="flex items-center justify-between">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
                   <div 
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold font-heading transition-all ${
                       index <= currentStep 
-                        ? "bg-gradient-accent text-white shadow-lg" 
+                        ? "bg-accent text-accent-foreground shadow-lg shadow-accent/25" 
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {index + 1}
                   </div>
-                  <span className={`ml-3 text-sm font-medium ${
+                  <span className={`ml-3 text-sm font-heading font-medium tracking-tight ${
                     index <= currentStep ? "text-foreground" : "text-muted-foreground"
                   }`}>
                     {step.label}

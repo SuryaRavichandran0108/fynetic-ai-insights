@@ -94,24 +94,25 @@ export default function Research() {
   return (
     <div className="container mx-auto p-6 space-y-8 animate-fade-in">
       {/* Hero Header */}
-      <Card className="bg-gradient-surface border-accent/20">
-        <CardContent className="p-8">
-          <div className="flex items-center justify-between">
-            <div className="space-y-3">
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-accent">
-                  <Search className="h-6 w-6 text-white" />
+      <Card className="bg-gradient-primary border-0 text-foreground shadow-2xl rounded-2xl overflow-hidden">
+        <CardContent className="p-8 relative">
+          <div className="flex items-center justify-between relative z-10">
+            <div className="space-y-4">
+              <h1 className="text-3xl font-heading font-bold flex items-center gap-3 text-foreground tracking-tight">
+                <div className="p-3 rounded-2xl bg-accent/20 backdrop-blur-sm shadow-lg">
+                  <Search className="h-6 w-6 text-accent" />
                 </div>
                 Explore Players & Teams
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl">
+              <p className="text-foreground/90 text-lg max-w-2xl font-body">
                 Discover player trends, analyze performance patterns, and find your next winning edge with data-driven insights.
               </p>
             </div>
-            <div className="hidden md:block text-6xl opacity-20">
+            <div className="hidden md:block text-6xl opacity-20 text-accent/30">
               📊
             </div>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-secondary/10 pointer-events-none" />
         </CardContent>
       </Card>
 
@@ -129,9 +130,9 @@ export default function Research() {
 
         <TabsContent value="player-trends" className="space-y-6 mt-6">
           {/* Filter Panel */}
-          <Card className="border-accent/20 bg-gradient-surface">
+          <Card className="border-accent/30 bg-gradient-card rounded-2xl shadow-xl">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="text-lg font-heading font-semibold flex items-center gap-2 text-foreground tracking-tight">
                 <Filter className="h-5 w-5 text-accent" />
                 Filter & Search
               </CardTitle>
@@ -139,9 +140,9 @@ export default function Research() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Team</label>
+                  <label className="text-sm font-heading font-medium text-foreground">Team</label>
                   <Select value={selectedTeam} onValueChange={setSelectedTeam}>
-                    <SelectTrigger className="bg-background">
+                    <SelectTrigger className="bg-background border-accent/30 hover:border-accent/50 transition-colors rounded-xl">
                       <SelectValue placeholder="All teams" />
                     </SelectTrigger>
                     <SelectContent>
@@ -154,9 +155,9 @@ export default function Research() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Market</label>
+                  <label className="text-sm font-heading font-medium text-foreground">Market</label>
                   <Select value={selectedMarket} onValueChange={setSelectedMarket}>
-                    <SelectTrigger className="bg-background">
+                    <SelectTrigger className="bg-background border-accent/30 hover:border-accent/50 transition-colors rounded-xl">
                       <SelectValue placeholder="All markets" />
                     </SelectTrigger>
                     <SelectContent>
@@ -170,9 +171,9 @@ export default function Research() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Lookback</label>
+                  <label className="text-sm font-heading font-medium text-foreground">Lookback</label>
                   <Select value={lookback} onValueChange={setLookback}>
-                    <SelectTrigger className="bg-background">
+                    <SelectTrigger className="bg-background border-accent/30 hover:border-accent/50 transition-colors rounded-xl">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -184,7 +185,7 @@ export default function Research() {
                 </div>
 
                 <div className="flex items-end">
-                  <Button size="lg" className="w-full gap-2 bg-gradient-accent hover:bg-accent-hover">
+                  <Button size="lg" className="w-full gap-2 bg-accent text-accent-foreground hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/25 rounded-xl font-heading font-medium transition-all duration-300">
                     <Search className="h-4 w-4" />
                     Apply Filters
                   </Button>
@@ -194,18 +195,18 @@ export default function Research() {
           </Card>
 
           {/* Player Trend Cards */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Player Analysis</h2>
-              <Badge variant="secondary" className="gap-1">
-                <Star className="h-3 w-3" />
-                {mockPlayerTrends.length} Top Performers
-              </Badge>
-            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-heading font-semibold text-foreground tracking-tight">Player Analysis</h2>
+                <Badge className="gap-1 bg-accent/20 text-accent border-accent/30 rounded-full">
+                  <Star className="h-3 w-3" />
+                  {mockPlayerTrends.length} Top Performers
+                </Badge>
+              </div>
             
             <div className="grid gap-4">
               {mockPlayerTrends.map((trend) => (
-                <Card key={trend.id} className="hover:bg-card-hover transition-all duration-200 hover:scale-[1.01] hover:shadow-lg group cursor-pointer">
+                <Card key={trend.id} className="hover:bg-card-hover transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:shadow-accent/10 hover:border-accent/30 group cursor-pointer bg-gradient-card rounded-2xl border border-border">
                   <CardContent className="p-6">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                       {/* Player Info */}
@@ -217,10 +218,10 @@ export default function Research() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h3 className="font-bold text-lg">{trend.player}</h3>
+                          <h3 className="font-heading font-bold text-lg text-foreground">{trend.player}</h3>
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">{trend.team}</Badge>
-                            <span className="text-sm text-accent font-medium">{trend.market}</span>
+                            <Badge variant="outline" className="text-xs border-accent/30 text-accent">{trend.team}</Badge>
+                            <span className="text-sm text-accent font-medium font-body">{trend.market}</span>
                           </div>
                         </div>
                       </div>

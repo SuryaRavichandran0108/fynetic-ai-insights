@@ -101,24 +101,25 @@ export default function AskFynetic() {
   return (
     <div className="container mx-auto p-6 space-y-6 animate-fade-in">
       {/* Hero Header */}
-      <Card className="bg-gradient-surface border-accent/20">
-        <CardContent className="p-8">
-          <div className="flex items-center justify-between">
-            <div className="space-y-3">
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-accent">
-                  <Brain className="h-6 w-6 text-white" />
+      <Card className="bg-gradient-primary border-0 text-foreground shadow-2xl rounded-2xl overflow-hidden">
+        <CardContent className="p-8 relative">
+          <div className="flex items-center justify-between relative z-10">
+            <div className="space-y-4">
+              <h1 className="text-3xl font-heading font-bold flex items-center gap-3 text-foreground tracking-tight">
+                <div className="p-3 rounded-2xl bg-accent/20 backdrop-blur-sm shadow-lg">
+                  <Brain className="h-6 w-6 text-accent" />
                 </div>
                 Ask FYNETIC
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl">
+              <p className="text-foreground/90 text-lg max-w-2xl font-body">
                 Your AI-powered sports analytics assistant. Ask questions about players, matchups, and get data-driven insights for smarter decisions.
               </p>
             </div>
-            <div className="hidden md:block text-6xl opacity-20">
+            <div className="hidden md:block text-6xl opacity-20 text-accent/30">
               🤖
             </div>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-secondary/10 pointer-events-none" />
         </CardContent>
       </Card>
 
@@ -126,13 +127,13 @@ export default function AskFynetic() {
         {/* Context Dock */}
         <div className="lg:col-span-1 space-y-4">
           {/* Today's Slate */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm flex items-center gap-2">
-                <Clock className="h-4 w-4 text-accent" />
-                Today's Games
-              </CardTitle>
-            </CardHeader>
+            <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-sm font-heading font-semibold flex items-center gap-2 text-foreground tracking-tight">
+                  <Clock className="h-4 w-4 text-accent" />
+                  Today's Games
+                </CardTitle>
+              </CardHeader>
             <CardContent className="space-y-3">
               {mockSlateGames.map((game) => (
                 <div key={game.id} className="p-3 rounded-lg bg-muted/50 space-y-1">
@@ -149,9 +150,9 @@ export default function AskFynetic() {
           </Card>
 
           {/* Active Props */}
-          <Card>
+          <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
             <CardHeader>
-              <CardTitle className="text-sm flex items-center gap-2">
+              <CardTitle className="text-sm font-heading font-semibold flex items-center gap-2 text-foreground tracking-tight">
                 <Target className="h-4 w-4 text-accent" />
                 Your Props
               </CardTitle>
@@ -173,12 +174,12 @@ export default function AskFynetic() {
 
         {/* Chat Interface */}
         <div className="lg:col-span-3">
-          <Card className="h-[600px] flex flex-col">
+          <Card className="h-[600px] flex flex-col bg-gradient-card border-accent/30 rounded-2xl shadow-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 font-heading font-semibold text-foreground tracking-tight">
                 <MessageSquare className="h-5 w-5 text-accent" />
                 Chat with FYNETIC
-                <Badge variant="secondary" className="ml-auto">AI Assistant</Badge>
+                <Badge className="ml-auto bg-accent/20 text-accent border-accent/30">AI Assistant</Badge>
               </CardTitle>
             </CardHeader>
             
