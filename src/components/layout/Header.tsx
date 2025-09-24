@@ -50,7 +50,7 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
         {/* Logo and League Selector */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <img src="/brand/fynetic-logo-dark.svg" alt="FYNETIC" className="h-8 w-auto" />
+            <img src="/brand/fynetic-logo-dark.svg" alt="FYNETIC" className="h-10 w-auto" />
           </div>
 
           {/* League Selector */}
