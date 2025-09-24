@@ -2,70 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* FYNETIC Sports Analytics Design System
+/* FYNETIC Sports Analytics Design System - Modern Professional
 All colors MUST be HSL format for proper theming.
 */
 
 @layer base {
   :root {
-    /* Core Brand Colors */
-    --background: 220 15% 97%;
-    --foreground: 220 25% 10%;
+    /* Modern Typography */
+    --font-heading: 'Poppins', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
 
-    /* Card System */
+    /* Core Brand Colors - Professional Navy & Electric Blue */
+    --background: 210 20% 98%;
+    --foreground: 220 39% 11%;
+
+    /* Card System - Clean whites with subtle shadows */
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
-    --card-hover: 220 30% 98%;
+    --card-foreground: 220 39% 11%;
+    --card-hover: 210 20% 96%;
 
     /* Interactive Elements */
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 220 39% 11%;
 
     /* Primary Brand - Deep Navy */
-    --primary: 220 25% 10%;
+    --primary: 220 39% 11%;
     --primary-foreground: 0 0% 98%;
-    --primary-hover: 220 30% 8%;
+    --primary-hover: 220 45% 8%;
 
-    /* Secondary - Light variants */
-    --secondary: 220 10% 95%;
-    --secondary-foreground: 220 25% 10%;
-    --secondary-hover: 220 15% 92%;
+    /* Electric Blue Accent */
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 98%;
+    --accent-hover: 221 83% 48%;
+
+    /* Mint/Teal Secondary */
+    --secondary: 172 66% 50%;
+    --secondary-foreground: 0 0% 98%;
+    --secondary-hover: 172 66% 45%;
 
     /* Muted elements */
-    --muted: 220 8% 94%;
-    --muted-foreground: 220 8% 45%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 13% 34%;
 
-    /* Accent - Sports Blue */
-    --accent: 200 95% 45%;
-    --accent-foreground: 0 0% 98%;
-    --accent-hover: 200 95% 40%;
-
-    /* Status Colors */
-    --success: 142 70% 45%;
+    /* Status Colors - Professional palette */
+    --success: 142 69% 58%;
     --success-foreground: 0 0% 98%;
-    --warning: 35 90% 55%;
-    --warning-foreground: 220 25% 10%;
-    --destructive: 0 70% 50%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 220 39% 11%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
+    --live: 0 84% 60%;
+    --live-foreground: 0 0% 98%;
 
     /* Borders and inputs */
-    --border: 220 13% 87%;
-    --input: 220 13% 87%;
-    --ring: 220 25% 10%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
 
-    /* Sports Analytics Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(220 25% 10%), hsl(220 30% 15%));
-    --gradient-accent: linear-gradient(135deg, hsl(200 95% 45%), hsl(200 95% 55%));
-    --gradient-surface: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 10% 98%));
+    /* Modern Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(220 39% 11%), hsl(221 83% 53%));
+    --gradient-accent: linear-gradient(135deg, hsl(221 83% 53%), hsl(172 66% 50%));
+    --gradient-surface: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 20% 98%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 20% 99%));
     
-    /* Data Visualization */
-    --chart-1: 200 95% 45%;
-    --chart-2: 260 70% 55%;
-    --chart-3: 142 70% 45%;
-    --chart-4: 35 90% 55%;
-    --chart-5: 300 70% 50%;
+    /* Data Visualization - Bright accents */
+    --chart-1: 221 83% 53%;
+    --chart-2: 172 66% 50%;
+    --chart-3: 142 69% 58%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 262 83% 58%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -86,45 +93,48 @@ All colors MUST be HSL format for proper theming.
 
   .dark {
     /* Dark Mode - Professional Dark Theme */
-    --background: 220 25% 6%;
-    --foreground: 220 5% 95%;
+    --background: 220 39% 6%;
+    --foreground: 210 20% 95%;
 
-    --card: 220 20% 8%;
-    --card-foreground: 220 5% 95%;
-    --card-hover: 220 25% 10%;
+    --card: 220 39% 8%;
+    --card-foreground: 210 20% 95%;
+    --card-hover: 220 39% 10%;
 
-    --popover: 220 20% 8%;
-    --popover-foreground: 220 5% 95%;
+    --popover: 220 39% 8%;
+    --popover-foreground: 210 20% 95%;
 
-    --primary: 200 95% 55%;
-    --primary-foreground: 220 25% 6%;
-    --primary-hover: 200 95% 50%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 220 39% 6%;
+    --primary-hover: 221 83% 48%;
 
-    --secondary: 220 15% 12%;
-    --secondary-foreground: 220 5% 95%;
-    --secondary-hover: 220 20% 15%;
+    --accent: 221 83% 53%;
+    --accent-foreground: 220 39% 6%;
+    --accent-hover: 221 83% 48%;
 
-    --muted: 220 15% 10%;
-    --muted-foreground: 220 5% 65%;
+    --secondary: 172 66% 50%;
+    --secondary-foreground: 220 39% 6%;
+    --secondary-hover: 172 66% 45%;
 
-    --accent: 200 95% 55%;
-    --accent-foreground: 220 25% 6%;
-    --accent-hover: 200 95% 50%;
+    --muted: 220 39% 10%;
+    --muted-foreground: 215 13% 65%;
 
-    --success: 142 70% 50%;
-    --success-foreground: 220 25% 6%;
-    --warning: 35 90% 60%;
-    --warning-foreground: 220 25% 6%;
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 220 5% 95%;
+    --success: 142 69% 58%;
+    --success-foreground: 220 39% 6%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 220 39% 6%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 20% 95%;
+    --live: 0 84% 60%;
+    --live-foreground: 210 20% 95%;
 
-    --border: 220 15% 15%;
-    --input: 220 15% 15%;
-    --ring: 200 95% 55%;
+    --border: 220 39% 15%;
+    --input: 220 39% 15%;
+    --ring: 221 83% 53%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(220 25% 6%), hsl(220 30% 10%));
-    --gradient-accent: linear-gradient(135deg, hsl(200 95% 45%), hsl(200 95% 55%));
-    --gradient-surface: linear-gradient(180deg, hsl(220 20% 8%), hsl(220 25% 6%));
+    --gradient-primary: linear-gradient(135deg, hsl(220 39% 6%), hsl(220 39% 12%));
+    --gradient-accent: linear-gradient(135deg, hsl(221 83% 53%), hsl(172 66% 50%));
+    --gradient-surface: linear-gradient(180deg, hsl(220 39% 8%), hsl(220 39% 6%));
+    --gradient-card: linear-gradient(145deg, hsl(220 39% 8%), hsl(220 39% 10%));
   }
 }
 
@@ -135,5 +145,15 @@ All colors MUST be HSL format for proper theming.
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+
+  .text-heading {
+    font-family: var(--font-heading);
   }
 }

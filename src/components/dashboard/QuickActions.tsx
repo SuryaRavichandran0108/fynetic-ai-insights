@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Target, MessageSquare } from "lucide-react";
+import { Search, Target, MessageCircle } from "lucide-react";
 
 interface QuickActionsProps {
   onExploreClick: () => void;
@@ -12,48 +12,44 @@ export function QuickActions({ onExploreClick, onBuildPropClick, onAskFyneticCli
     {
       icon: Search,
       title: "Explore Players",
-      description: "Research player trends and matchup data",
+      description: "Research trends and matchup edges with data-driven insights",
       onClick: onExploreClick,
-      color: "text-chart-1"
+      gradient: "bg-gradient-accent"
     },
     {
       icon: Target,
       title: "Build a Prop",
-      description: "Create and analyze player propositions",
+      description: "Create and analyze custom propositions with AI guidance",
       onClick: onBuildPropClick,
-      color: "text-accent"
+      gradient: "bg-gradient-primary"
     },
     {
-      icon: MessageSquare,
+      icon: MessageCircle,
       title: "Ask FYNETIC",
-      description: "Get AI insights about today's games",
+      description: "Get personalized AI insights for today's slate",
       onClick: onAskFyneticClick,
-      color: "text-chart-3"
+      gradient: "bg-secondary"
     }
   ];
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Quick Actions</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="animate-slide-up">
+      <h2 className="text-xl font-heading font-semibold mb-6 text-foreground">Quick Actions</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {actions.map((action) => {
           const Icon = action.icon;
           return (
             <Card 
               key={action.title}
-              className="cursor-pointer hover:bg-card-hover transition-all duration-200 hover:scale-[1.02] group"
               onClick={action.onClick}
+              className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-gradient-card border-0 shadow-md rounded-2xl group"
             >
-              <CardContent className="p-6 text-center space-y-3">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-muted group-hover:bg-accent/10 transition-colors`}>
-                  <Icon className={`h-6 w-6 ${action.color} group-hover:text-accent transition-colors`} />
+              <CardContent className="p-8 text-center">
+                <div className={`w-16 h-16 ${action.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                  <Icon className="h-8 w-8 text-white" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-lg">{action.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {action.description}
-                  </p>
-                </div>
+                <h3 className="font-heading font-semibold text-lg mb-2">{action.title}</h3>
+                <p className="text-muted-foreground text-sm">{action.description}</p>
               </CardContent>
             </Card>
           );

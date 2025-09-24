@@ -1,9 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, Users, Target, ChevronDown, ChevronUp } from "lucide-react";
+import { Clock, Users, Target, ChevronDown } from "lucide-react";
 import { TermTooltip } from "@/components/ui/term-tooltip";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface Game {
   id: string;
@@ -67,89 +68,94 @@ export function TodaysSlate({ games, isAdvanced }: TodaysSlateProps) {
   const displayGames = games.length > 0 ? games : mockGames;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Clock className="h-5 w-5 text-accent" />
-        <h2 className="text-xl font-semibold">Today's Games</h2>
+    <div className="animate-slide-up space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-heading font-semibold text-foreground">Today's Slate</h2>
+        <Badge variant="outline" className="rounded-full">
+          {displayGames.length} games
+        </Badge>
       </div>
       
-      <div className="space-y-3">
+      <div className="space-y-4">
         {displayGames.map((game) => {
           const isExpanded = expandedGames.has(game.id);
           
           return (
-            <Card key={game.id} className="hover:bg-card-hover transition-colors">
-              <CardContent className="p-4">
-                <div className="space-y-3">
-                  {/* Main Game Info */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="text-center">
-                        <div className="font-semibold text-lg">{game.awayTeam}</div>
-                        <div className="text-xs text-muted-foreground">@</div>
-                        <div className="font-semibold text-lg">{game.homeTeam}</div>
+            <Card 
+              key={game.id}
+              className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 bg-gradient-card border-0 shadow-md rounded-2xl overflow-hidden group"
+              onClick={() => toggleExpanded(game.id)}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-accent rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {game.awayTeam.slice(0, 2)}
                       </div>
-                      
-                      <div className="space-y-2">
-                        <Badge 
-                          variant={game.status === "LIVE" ? "destructive" : "secondary"}
-                          className="w-fit"
-                        >
-                          {game.status === "LIVE" ? "🔴 LIVE" : game.startTime}
-                        </Badge>
-                        <div className="text-sm text-muted-foreground font-medium">
+                      <span className="text-muted-foreground">@</span>
+                      <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {game.homeTeam.slice(0, 2)}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div className="font-heading font-semibold text-lg">
+                        {game.awayTeam} @ {game.homeTeam}
+                      </div>
+                      <div className="flex items-center gap-3 mt-1">
+                        {game.status === "LIVE" ? (
+                          <Badge className="bg-live text-live-foreground rounded-full px-3 py-1 text-xs font-medium">
+                            🔴 LIVE
+                          </Badge>
+                        ) : (
+                          <span className="text-sm text-muted-foreground font-medium">
+                            {game.startTime}
+                          </span>
+                        )}
+                        <Badge variant="secondary" className="rounded-full bg-secondary/10 text-secondary font-medium">
                           {getGameInsight(game)}
-                        </div>
+                        </Badge>
                       </div>
                     </div>
-
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleExpanded(game.id)}
-                      className="gap-1"
-                    >
-                      Details
-                      {isExpanded ? (
-                        <ChevronUp className="h-3 w-3" />
-                      ) : (
-                        <ChevronDown className="h-3 w-3" />
-                      )}
-                    </Button>
                   </div>
-
-                  {/* Expanded Details */}
-                  {isExpanded && (
-                    <div className="pt-3 border-t space-y-3 animate-fade-in">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <TermTooltip 
-                            term="Over/Under" 
-                            definition="Total combined points expected by sportsbooks"
-                          >
-                            <span className="text-muted-foreground">O/U:</span>
-                          </TermTooltip>
-                          <span className="ml-2 font-medium">{game.impliedTotal}</span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Status:</span>
-                          <span className="ml-2 font-medium capitalize">{game.status.toLowerCase()}</span>
-                        </div>
+                  
+                  <ChevronDown className={cn(
+                    "h-5 w-5 transition-transform text-muted-foreground group-hover:text-accent",
+                    isExpanded && "rotate-180"
+                  )} />
+                </div>
+                
+                {isExpanded && (
+                  <div className="mt-6 pt-6 border-t border-border/50 space-y-4 animate-fade-in">
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="bg-muted/30 rounded-xl p-4">
+                        <TermTooltip 
+                          term="Over/Under" 
+                          definition="The total combined points expected by sportsbooks"
+                        >
+                          <div className="text-sm text-muted-foreground">O/U Total</div>
+                          <div className="font-heading font-bold text-xl text-accent">{game.impliedTotal}</div>
+                        </TermTooltip>
                       </div>
-                      
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="gap-1">
-                          <Target className="h-3 w-3" />
-                          Build Props
-                        </Button>
-                        <Button size="sm" variant="outline" className="gap-1">
-                          <Users className="h-3 w-3" />
-                          Research
-                        </Button>
+                      <div className="bg-muted/30 rounded-xl p-4">
+                        <div className="text-sm text-muted-foreground">Status</div>
+                        <div className="font-heading font-bold text-xl text-secondary capitalize">{game.status.toLowerCase()}</div>
                       </div>
                     </div>
-                  )}
-                </div>
+                    
+                    <div className="flex gap-3">
+                      <Button size="sm" className="rounded-full bg-accent text-accent-foreground hover:bg-accent-hover">
+                        <Target className="h-3 w-3 mr-1" />
+                        Build Props
+                      </Button>
+                      <Button size="sm" variant="outline" className="rounded-full">
+                        <Users className="h-3 w-3 mr-1" />
+                        Research
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           );
