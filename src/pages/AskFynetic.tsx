@@ -1,437 +1,352 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { TrendlineChart } from "@/components/ChartPlaceholders";
-import { StatusBadge, LeagueBadge } from "@/components/Badges";
-import { 
-  MessageSquare, 
-  Send, 
-  Bookmark,
-  Plus,
-  TrendingUp,
-  Clock,
-  Target,
-  Brain,
-  Info,
-  Lightbulb,
-  Zap,
-  BookOpen,
-  ChevronRight
-} from "lucide-react";
+import { Send, MessageSquare, TrendingUp, Users, Calendar, BarChart3, Activity, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useLocation } from "react-router-dom";
 
-interface ChatMessage {
+interface Message {
   id: string;
-  role: "system" | "user" | "assistant";
+  role: "user" | "assistant";
   content: string;
-  timestamp?: Date;
-  actions?: Array<{
-    label: string;
-    action: string;
-  }>;
+  confidence?: number;
+  timestamp: Date;
+}
+
+interface ConfidenceIndicatorProps {
+  value: number;
+  label?: "Low" | "Medium" | "High";
+}
+
+function ConfidenceIndicator({ value, label }: ConfidenceIndicatorProps) {
+  const tier = label || (value >= 70 ? "High" : value >= 40 ? "Medium" : "Low");
+  const colorClass = value >= 70 ? "bg-accent-teal" : value >= 40 ? "bg-warning" : "bg-negative";
+  
+  return (
+    <div className="mt-3 p-3 rounded-lg bg-surface/50 border border-border">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm text-text-muted">Confidence</span>
+        <span className="text-sm font-medium text-text-primary">{value}% ({tier})</span>
+      </div>
+      <div className="w-full bg-surface-2 rounded-full h-2">
+        <div 
+          className={cn("h-2 rounded-full transition-all duration-300", colorClass)}
+          style={{ width: `${value}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+interface RecentItem {
+  id: string;
+  name: string;
+  type: "player" | "prop";
+  subtitle?: string;
+}
+
+function ContextDock() {
+  const recentPlayers: RecentItem[] = [
+    { id: "1", name: "Luka Dončić", type: "player", subtitle: "DAL • PG" },
+    { id: "2", name: "Jayson Tatum", type: "player", subtitle: "BOS • SF" },
+    { id: "3", name: "Nikola Jokić", type: "player", subtitle: "DEN • C" },
+  ];
+
+  const recentProps: RecentItem[] = [
+    { id: "1", name: "Tatum 3PT over 2.5", type: "prop" },
+    { id: "2", name: "Luka REB over 8.5", type: "prop" },
+    { id: "3", name: "Jokić AST over 9.5", type: "prop" },
+  ];
+
+  return (
+    <div className="w-80 border-l border-border bg-surface-2/30 p-4 space-y-6">
+      <div>
+        <h3 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
+          <Users className="h-4 w-4" />
+          Recent Players
+        </h3>
+        <div className="space-y-2">
+          {recentPlayers.map((player) => (
+            <div
+              key={player.id}
+              className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface/50 cursor-pointer transition-colors"
+            >
+              <div className="w-8 h-8 rounded-full bg-accent-teal/20 flex items-center justify-center">
+                <span className="text-xs font-medium text-accent-teal">
+                  {player.name.split(' ').map(n => n[0]).join('')}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-text-primary truncate">{player.name}</p>
+                <p className="text-xs text-text-muted">{player.subtitle}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4" />
+          Recent Props
+        </h3>
+        <div className="space-y-2">
+          {recentProps.map((prop) => (
+            <div
+              key={prop.id}
+              className="p-2 rounded-lg hover:bg-surface/50 cursor-pointer transition-colors"
+            >
+              <Badge variant="outline" className="text-xs">
+                {prop.name}
+              </Badge>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
+          <Star className="h-4 w-4" />
+          Pinned
+        </h3>
+        <p className="text-xs text-text-muted">No pinned items yet</p>
+      </div>
+    </div>
+  );
 }
 
 export default function AskFynetic() {
-  const [isBeginnerMode, setIsBeginnerMode] = useState(false);
-  const [inputMessage, setInputMessage] = useState("");
-  const [selectedModal, setSelectedModal] = useState<string | null>(null);
-
-  // Mock data
-  const demoMessages: ChatMessage[] = [
+  const location = useLocation();
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      role: "system",
-      content: "💡 FYNETIC provides informational insights, not betting advice. All analysis is for educational purposes only."
-    },
-    {
-      id: "2", 
-      role: "user",
-      content: "What stands out in Bills @ Chiefs tonight?"
-    },
-    {
-      id: "3",
       role: "assistant",
-      content: isBeginnerMode 
-        ? "I see two interesting patterns for tonight:\n\n🏈 **High-scoring game expected** - Both teams like to throw the ball a lot\n📊 **Josh Allen looks good** - He's been throwing for more yards than usual lately\n\nThe betting line for Allen's passing yards is 259.5. He's averaged 271 yards in his last 5 games. Would you like me to explain what this means?"
-        : "Two angles pop for tonight's slate:\n\n• **High tempo, pass-heavy scripts** → QB passing yards in play\n• **Close spread (-2.5)** → WR receptions could hit\n\nContext: Allen averaging **271 yds** L5 vs typical line **259.5**; KC pass D ranks middle tier. Weather stable, dome conditions.",
-      actions: [
-        { label: "Suggest a prop", action: "suggest-prop" },
-        { label: "Open team matchups", action: "team-matchups" },
-        { label: "Explain volatility", action: "explain-volatility" }
-      ]
-    },
-    {
-      id: "4",
-      role: "user", 
-      content: "Suggest a safe option"
-    },
-    {
-      id: "5",
-      role: "assistant",
-      content: isBeginnerMode
-        ? "**Josh Allen Over 1.5 Passing Touchdowns** 📈\n\n🎯 **Simple explanation**: Allen needs to throw at least 2 touchdown passes\n📊 **Recent form**: He's done this in 7 of his last 10 games\n🏈 **Why it makes sense**: Chiefs defense allows touchdowns\n\n**Confidence**: 72 out of 100 (pretty good!)"
-        : "**Josh Allen Over 1.5 Pass TDs (-115)**\n\n📊 **Context**: L10 games median **2 TDs**; red zone efficiency trending up; weather stable\n🎯 **Edge**: KC allows 1.8 pass TDs/game (18th ranked)\n⚡ **Model confidence**: **72/100** (heuristic)\n\n*Line movement stable across books*",
-      actions: [
-        { label: "Add to Slip", action: "add-to-slip" },
-        { label: "View player trend", action: "player-trend" },
-        { label: "Compare alt lines", action: "alt-lines" }
-      ]
+      content: "👋 Hey there! I'm FYNETIC, your AI sports analyst. I can help you analyze player performance, evaluate props, compare matchups, and dive deep into any sports analytics question you have. What would you like to explore?",
+      timestamp: new Date(),
     }
-  ];
+  ]);
+  const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const todaysSlate = [
-    { 
-      id: "1", 
-      matchup: "Bills @ Chiefs", 
-      time: "8:20 PM EST", 
-      insight: "High total, pass-heavy",
-      status: "upcoming" as const
-    },
-    { 
-      id: "2", 
-      matchup: "Cowboys @ Eagles", 
-      time: "4:25 PM EST", 
-      insight: "Defensive battle expected",
-      status: "upcoming" as const
-    },
-    { 
-      id: "3", 
-      matchup: "49ers @ Rams", 
-      time: "Live", 
-      insight: "Close game, OT potential",
-      status: "live" as const
+  // Check for prefilled text from navigation
+  useEffect(() => {
+    if (location.state?.prefilledText) {
+      setInputValue(location.state.prefilledText);
     }
+  }, [location.state]);
+
+  const examplePrompts = [
+    "How has Luka Dončić performed in his last 5 games?",
+    "Is this prop a good value: Tatum over 6.5 rebounds?",
+    "Compare Jokić vs Embiid over the last 10 games",
+    "How do injuries affect tonight's Lakers vs Warriors total?"
   ];
 
-  const betSlipPreview = [
-    { 
-      id: "1", 
-      player: "Josh Allen", 
-      market: "Passing Yards O259.5", 
-      odds: "-115",
-      stake: "$25"
-    },
-    { 
-      id: "2", 
-      player: "Travis Kelce", 
-      market: "Receiving Yards O67.5", 
-      odds: "-110",
-      stake: "$30"
-    }
+  const quickActions = [
+    { label: "Compare Players", icon: Users },
+    { label: "Recent Trends", icon: TrendingUp },
+    { label: "Injuries", icon: Activity },
+    { label: "Game Log", icon: Calendar },
+    { label: "Team Pace", icon: BarChart3 },
+    { label: "Usage Rate", icon: BarChart3 },
   ];
 
-  const shortcuts = [
-    { label: "Top Overs", icon: TrendingUp, color: "bg-success/10 text-success" },
-    { label: "QB Passing", icon: Target, color: "bg-accent/10 text-accent" },
-    { label: "Beginner Tips", icon: Lightbulb, color: "bg-warning/10 text-warning" },
-    { label: "Live Games", icon: Zap, color: "bg-destructive/10 text-destructive" }
-  ];
-
-  const handleSendMessage = () => {
-    // Static preview - show tooltip instead
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const Modal = ({ trigger, title, children }: { trigger: React.ReactNode; title: string; children: React.ReactNode }) => (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="bg-card border-accent/30">
-        <DialogHeader>
-          <DialogTitle className="font-heading text-foreground">{title}</DialogTitle>
-        </DialogHeader>
-        {children}
-      </DialogContent>
-    </Dialog>
-  );
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!inputValue.trim() || isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: inputValue,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue("");
+    setIsLoading(true);
+
+    // Simulate AI response
+    setTimeout(() => {
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "Based on the available data, here's my analysis:\n\n• Luka has been averaging 28.4 points over his last 5 games\n• His shooting efficiency has improved to 47% from the field\n• He's dealing with minor ankle soreness but it hasn't affected his performance\n• Against similar opponents, he typically exceeds this line 67% of the time\n\nThe matchup favors Luka with a pace-up spot and potential overtime scenario.",
+        confidence: 72,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, aiMessage]);
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const handleQuickAction = (action: string) => {
+    setInputValue(`Help me analyze ${action.toLowerCase()} for `);
+  };
+
+  const handleExamplePrompt = (prompt: string) => {
+    setInputValue(prompt);
+  };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 animate-fade-in">
-      {/* Hero Header */}
-      <Card className="bg-gradient-primary border-0 text-foreground shadow-2xl rounded-2xl overflow-hidden">
-        <CardContent className="p-8 relative">
-          <div className="flex items-center justify-between relative z-10">
-            <div className="space-y-4">
-              <h1 className="text-3xl font-heading font-bold flex items-center gap-3 text-foreground tracking-tight">
-                <div className="p-3 rounded-2xl bg-accent/20 backdrop-blur-sm shadow-lg">
-                  <Brain className="h-6 w-6 text-accent" />
-                </div>
-                Ask FYNETIC
-              </h1>
-              <p className="text-foreground/90 text-lg max-w-2xl font-body">
-                Your AI-powered sports analytics assistant. Ask questions about players, matchups, and get data-driven insights for smarter decisions.
-              </p>
+    <div className="min-h-screen bg-background flex">
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="border-b border-border bg-surface-2/50 p-4">
+          <div className="max-w-4xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <MessageSquare className="h-6 w-6 text-accent-teal" />
+              <h1 className="text-xl font-semibold text-text-primary">Ask FYNETIC</h1>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-foreground/70 font-body">
-                  {isBeginnerMode ? "Beginner" : "Advanced"}
-                </span>
-                <Switch
-                  checked={isBeginnerMode}
-                  onCheckedChange={setIsBeginnerMode}
-                />
-              </div>
-              <div className="hidden md:block text-6xl opacity-20 text-accent/30">
-                🤖
-              </div>
-            </div>
+            <p className="text-sm text-text-muted">Analytics for information only — not betting advice</p>
           </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-secondary/10 pointer-events-none" />
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Context Dock */}
-        <div className="lg:col-span-1 space-y-4">
-          {/* Today's Slate */}
-          <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-sm font-heading font-semibold flex items-center gap-2 text-foreground tracking-tight">
-                <Clock className="h-4 w-4 text-accent" />
-                Today's Slate
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {todaysSlate.map((game) => (
-                <div key={game.id} className="p-3 rounded-xl bg-background/50 border border-border/30 space-y-2 hover:bg-background/70 transition-colors cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <p className="font-heading font-semibold text-sm text-foreground">{game.matchup}</p>
-                    {game.status === "live" && (
-                      <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />
-                        <span className="text-xs text-destructive font-medium">LIVE</span>
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">{game.time}</p>
-                  <p className="text-xs text-accent font-medium">{game.insight}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Bet Slip Preview */}
-          <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-sm font-heading font-semibold flex items-center gap-2 text-foreground tracking-tight">
-                <Target className="h-4 w-4 text-accent" />
-                Your Bet Slip
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {betSlipPreview.map((bet) => (
-                <div key={bet.id} className="p-3 rounded-xl bg-background/50 border border-border/30 space-y-1">
-                  <p className="font-heading font-medium text-sm text-foreground">{bet.player}</p>
-                  <p className="text-xs text-muted-foreground">{bet.market}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-accent font-medium">{bet.odds}</span>
-                    <span className="text-xs font-semibold">{bet.stake}</span>
-                  </div>
-                </div>
-              ))}
-              <Button variant="outline" size="sm" className="w-full gap-1 border-accent/30 hover:bg-accent/10">
-                <Plus className="h-3 w-3" />
-                Add More
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Shortcuts */}
-          <Card className="bg-gradient-card border-accent/30 rounded-2xl shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-sm font-heading font-semibold flex items-center gap-2 text-foreground tracking-tight">
-                <Zap className="h-4 w-4 text-accent" />
-                Quick Shortcuts
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {shortcuts.map((shortcut, index) => {
-                const Icon = shortcut.icon;
-                return (
-                  <Button 
-                    key={index}
-                    variant="ghost" 
-                    size="sm" 
-                    className={`w-full justify-start gap-2 ${shortcut.color} hover:bg-opacity-20 rounded-xl`}
-                  >
-                    <Icon className="h-3 w-3" />
-                    {shortcut.label}
-                  </Button>
-                );
-              })}
-            </CardContent>
-          </Card>
         </div>
 
-        {/* Chat Interface */}
-        <div className="lg:col-span-3">
-          <Card className="h-[600px] flex flex-col bg-gradient-card border-accent/30 rounded-2xl shadow-xl">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2 font-heading font-semibold text-foreground tracking-tight">
-                  <MessageSquare className="h-5 w-5 text-accent" />
-                  Chat with FYNETIC
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Badge className="bg-accent/20 text-accent border-accent/30">AI Assistant</Badge>
-                  <Badge variant="outline" className="text-xs border-warning/30 text-warning">
-                    Informational Only
-                  </Badge>
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4">
+          <div className="max-w-4xl mx-auto space-y-6">
+            {messages.length === 1 && (
+              <div className="text-center py-8">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold text-text-primary mb-2">
+                    What would you like to analyze?
+                  </h2>
+                  <p className="text-text-muted">
+                    Ask me about player performance, prop analysis, matchups, or any sports analytics question.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                  {examplePrompts.map((prompt, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      className="h-auto p-4 text-left justify-start"
+                      onClick={() => handleExamplePrompt(prompt)}
+                    >
+                      {prompt}
+                    </Button>
+                  ))}
                 </div>
               </div>
-            </CardHeader>
-            
-            {/* Messages Area */}
-            <CardContent className="flex-1 overflow-y-auto space-y-4 p-6">
-              {demoMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] space-y-3 ${
-                    message.role === "user" 
-                      ? "bg-accent/90 text-accent-foreground rounded-2xl rounded-br-md p-4" 
-                      : message.role === "system"
-                      ? "bg-warning/10 border border-warning/30 text-warning rounded-xl p-3 text-center w-full max-w-none"
-                      : "bg-gradient-surface rounded-2xl rounded-bl-md p-4 border border-accent/20"
-                  }`}>
-                    <div className="space-y-2">
-                      {message.role === "assistant" && (
-                        <div className="flex items-center gap-2 text-xs text-accent">
-                          <Brain className="h-3 w-3" />
-                          <span className="font-heading font-medium">FYNETIC AI</span>
-                        </div>
-                      )}
-                      {message.role === "system" && (
-                        <div className="flex items-center justify-center gap-2 text-xs">
-                          <Info className="h-3 w-3" />
-                          <span className="font-heading font-medium">System Notice</span>
-                        </div>
-                      )}
-                      <div className="text-sm leading-relaxed whitespace-pre-line font-body">
-                        {message.content}
-                      </div>
-                    </div>
-                    
-                    {message.actions && (
-                      <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-accent/20">
-                        {message.actions.map((action, index) => (
-                          <Modal
-                            key={index}
-                            trigger={
-                              <Button size="sm" variant="secondary" className="text-xs rounded-full hover:bg-accent/20">
-                                {action.label}
-                                <ChevronRight className="h-3 w-3 ml-1" />
-                              </Button>
-                            }
-                            title={action.label}
-                          >
-                            {action.action === "add-to-slip" ? (
-                              <div className="space-y-4">
-                                <div className="p-4 rounded-xl bg-accent/10 border border-accent/30">
-                                  <h3 className="font-heading font-semibold text-foreground mb-2">Josh Allen Over 1.5 Pass TDs</h3>
-                                  <p className="text-sm text-muted-foreground mb-3">Odds: -115 • Stake: $25 • To Win: $21.74</p>
-                                  <p className="text-xs text-accent">This will be added to your bet slip for review.</p>
-                                </div>
-                                <div className="flex gap-2">
-                                  <Button disabled className="flex-1">Confirm Add (Demo)</Button>
-                                  <Button variant="outline" className="flex-1">Cancel</Button>
-                                </div>
-                              </div>
-                            ) : action.action === "explain-volatility" ? (
-                              <div className="space-y-4">
-                                <div className="space-y-3">
-                                  <div className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-accent rounded-full mt-2" />
-                                    <p className="text-sm text-muted-foreground">
-                                      <strong className="text-foreground">Weather Impact:</strong> Indoor game, no wind/precipitation concerns
-                                    </p>
-                                  </div>
-                                  <div className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-accent rounded-full mt-2" />
-                                    <p className="text-sm text-muted-foreground">
-                                      <strong className="text-foreground">Game Script:</strong> Close spread suggests balanced offensive approach
-                                    </p>
-                                  </div>
-                                  <div className="flex items-start gap-3">
-                                    <div className="w-2 h-2 bg-accent rounded-full mt-2" />
-                                    <p className="text-sm text-muted-foreground">
-                                      <strong className="text-foreground">Player Health:</strong> No injury concerns reported for key players
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="p-3 rounded-lg bg-muted/30">
-                                  <p className="text-xs text-muted-foreground mb-2">10-Game Variance</p>
-                                  <TrendlineChart data={[1, 3, 2, 1, 2, 3, 1, 2, 2, 3]} />
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="space-y-4">
-                                <p className="text-sm text-muted-foreground">
-                                  This feature demonstrates how FYNETIC would provide detailed analysis and suggestions. 
-                                  In the full version, this would show real-time data and actionable insights.
-                                </p>
-                                <Button disabled className="w-full">Learn More (Demo)</Button>
-                              </div>
-                            )}
-                          </Modal>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-              
-              {/* Typing indicator */}
-              <div className="flex justify-start">
-                <div className="bg-gradient-surface rounded-2xl rounded-bl-md p-4 border border-accent/20">
-                  <div className="flex items-center gap-2 text-xs text-accent mb-2">
-                    <Brain className="h-3 w-3" />
-                    <span className="font-heading font-medium">FYNETIC AI</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-accent rounded-full animate-bounce" />
-                    <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                    <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                    <span className="ml-2 text-xs text-muted-foreground font-body">Analyzing latest data...</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
+            )}
 
-            <Separator />
-            
-            {/* Input Area */}
-            <CardContent className="p-4">
-              <div className="flex gap-2">
-                <Input
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder={isBeginnerMode ? "Ask me about any player or game..." : "Ask about players, matchups, trends, or analysis..."}
-                  className="flex-1 bg-background border-accent/30 focus:border-accent/50 rounded-xl"
-                />
-                <Button 
-                  onClick={handleSendMessage}
-                  size="icon" 
-                  className="bg-accent text-accent-foreground hover:bg-accent-hover rounded-xl"
-                  disabled
-                  title="Static preview - messaging disabled"
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={cn(
+                  "flex gap-3",
+                  message.role === "user" ? "justify-end" : "justify-start"
+                )}
+              >
+                {message.role === "assistant" && (
+                  <div className="w-8 h-8 rounded-full bg-accent-teal/20 flex items-center justify-center flex-shrink-0">
+                    <MessageSquare className="h-4 w-4 text-accent-teal" />
+                  </div>
+                )}
+                <div
+                  className={cn(
+                    "max-w-2xl rounded-2xl px-4 py-3",
+                    message.role === "user"
+                      ? "bg-accent-teal text-background ml-12"
+                      : "bg-surface border border-border"
+                  )}
                 >
-                  <Send className="h-4 w-4" />
-                </Button>
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {message.content}
+                  </div>
+                  {message.confidence !== undefined && (
+                    <ConfidenceIndicator value={message.confidence} />
+                  )}
+                </div>
+                {message.role === "user" && (
+                  <div className="w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-medium text-text-primary">U</span>
+                  </div>
+                )}
               </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center font-body">
-                💡 Try: {isBeginnerMode 
-                  ? '"Explain Josh Allen passing yards" or "What are the best bets tonight?"'
-                  : '"Mahomes variance last 5" or "Show me high-confidence overs"'
-                }
-              </p>
-              <p className="text-xs text-warning mt-1 text-center font-body">
-                🚀 Demo preview - Full AI chat available in full version
-              </p>
-            </CardContent>
-          </Card>
+            ))}
+
+            {isLoading && (
+              <div className="flex gap-3 justify-start">
+                <div className="w-8 h-8 rounded-full bg-accent-teal/20 flex items-center justify-center flex-shrink-0">
+                  <MessageSquare className="h-4 w-4 text-accent-teal" />
+                </div>
+                <div className="bg-surface border border-border rounded-2xl px-4 py-3">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce"></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
         </div>
+
+        {/* Input Area */}
+        <div className="border-t border-border bg-surface-2/50 p-4">
+          <div className="max-w-4xl mx-auto space-y-4">
+            {/* Quick Actions */}
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {quickActions.map((action) => (
+                <Button
+                  key={action.label}
+                  variant="outline"
+                  size="sm"
+                  className="flex-shrink-0"
+                  onClick={() => handleQuickAction(action.label)}
+                >
+                  <action.icon className="h-4 w-4 mr-2" />
+                  {action.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Input */}
+            <div className="flex gap-3">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask about player performance, props, matchups..."
+                className="flex-1 bg-surface border-border"
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={!inputValue.trim() || isLoading}
+                className="bg-accent-teal hover:bg-accent-teal-700"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <p className="text-xs text-text-muted text-center">
+              FYNETIC provides analytics for information only. Not betting advice.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Context Dock */}
+      <div className="hidden lg:block">
+        <ContextDock />
       </div>
     </div>
   );

@@ -14,7 +14,141 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      messages: {
+        Row: {
+          confidence: number | null
+          content: Json
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          content: Json
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number | null
+          content?: Json
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pins: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      players_recent: {
+        Row: {
+          id: string
+          league: string
+          player_id: string
+          player_name: string
+          team: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          league: string
+          player_id: string
+          player_name: string
+          team: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          league?: string
+          player_id?: string
+          player_name?: string
+          team?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: []
+      }
+      props: {
+        Row: {
+          created_at: string
+          id: string
+          is_mock: boolean | null
+          league: string
+          line: number
+          market: string
+          notes: string | null
+          odds: number | null
+          player_id: string | null
+          player_name: string
+          side: string
+          sport: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_mock?: boolean | null
+          league: string
+          line: number
+          market: string
+          notes?: string | null
+          odds?: number | null
+          player_id?: string | null
+          player_name: string
+          side: string
+          sport: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_mock?: boolean | null
+          league?: string
+          line?: number
+          market?: string
+          notes?: string | null
+          odds?: number | null
+          player_id?: string | null
+          player_name?: string
+          side?: string
+          sport?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
