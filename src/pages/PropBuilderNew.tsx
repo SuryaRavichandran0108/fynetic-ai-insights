@@ -166,9 +166,14 @@ export default function PropBuilderNew() {
               </div>
 
               <div className="text-center">
-                <p className="text-sm text-text-muted mb-4">
-                  Prop created. You can analyze it in Ask FYNETIC.
-                </p>
+                <div className="mb-4">
+                  <a 
+                    href="/ask" 
+                    className="text-accent-teal hover:text-accent-teal-700 text-sm font-medium inline-flex items-center gap-1"
+                  >
+                    Ask FYNETIC about this →
+                  </a>
+                </div>
                 <Button 
                   variant="ghost" 
                   onClick={() => setShowConfirmation(false)}

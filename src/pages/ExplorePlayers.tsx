@@ -158,15 +158,13 @@ function PlayerCard({ player }: { player: Player }) {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-4 p-3 bg-surface-2/50 rounded-lg">
-          <p className="text-sm text-text-muted">
-            Want deeper analysis? <button 
-              onClick={handleAskFynetic}
-              className="text-accent-teal hover:underline"
-            >
-              Ask FYNETIC about {player.name}'s recent form
-            </button>
-          </p>
+        <div className="mt-4 text-right">
+          <button 
+            onClick={handleAskFynetic}
+            className="text-accent-teal hover:text-accent-teal-700 text-sm font-medium inline-flex items-center gap-1"
+          >
+            Ask FYNETIC about this →
+          </button>
         </div>
       </CardContent>
     </Card>
