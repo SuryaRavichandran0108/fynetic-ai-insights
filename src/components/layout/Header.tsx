@@ -26,12 +26,9 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
   const { isAdvanced, toggleMode } = useAdvancedMode();
 
   const navigationItems = [
-    { id: "dashboard", label: "Dashboard", icon: BarChart3 },
-    { id: "research", label: "Research", icon: Search },
-    { id: "prop-builder", label: "Prop Builder", icon: Target },
-    { id: "ask-fynetic", label: "Ask FYNETIC", icon: MessageSquare },
-    { id: "bet-tracker", label: "Bet Tracker", icon: TrendingUp },
-    { id: "admin", label: "Admin", icon: Settings },
+    { id: "ask", label: "Ask FYNETIC", icon: MessageSquare },
+    { id: "players", label: "Explore Players", icon: Search },
+    { id: "props", label: "Prop Builder", icon: Target },
   ];
 
   const leagues = ["NFL", "NBA", "MLB"];
@@ -50,7 +47,7 @@ export function Header({ currentPage, onPageChange }: HeaderProps) {
         {/* Logo and League Selector */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <img src="/brand/fynetic-logo-dark.svg" alt="FYNETIC" className="h-10 w-auto" />
+            <img src="/brand/fynetic-logo-primary.png" alt="FYNETIC" className="h-8 w-auto" />
           </div>
 
           {/* League Selector */}

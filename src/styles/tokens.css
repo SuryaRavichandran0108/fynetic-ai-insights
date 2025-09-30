@@ -8,21 +8,25 @@
 }
 :root {
   /* Core brand colors */
-  --bg: 222 42% 8%;              /* #0B0F19 deep navy charcoal */
-  --surface: 217 19% 15%;        /* #1A2233 slate card */
-  --surface-2: 218 25% 12%;      /* #141B29 deeper panel/header */
+  --bg: 218 45% 8%;              /* #0B0F14 app background */
+  --surface: 220 25% 13%;        /* #121826 cards/modals */
+  --surface-2: 218 25% 12%;      /* deeper panel/header */
   --border: 217 19% 23%;         /* #2C3445 */
 
-  --text-primary: 213 27% 94%;   /* #F1F5F9 warm off-white */
+  --text-primary: 215 100% 91%;  /* #E6F1FF */
   --text-secondary: 214 15% 59%; /* #94A3B8 */
-  --text-muted: 214 32% 36%;     /* #64748B */
+  --text-muted: 218 12% 63%;     /* #9AA4B2 */
 
-  --brand-teal: 174 100% 39%;    /* #00C6AE CYBER TEAL (hero) */
+  --accent-teal: 177 77% 52%;    /* #20E3D2 primary accent */
+  --accent-teal-700: 177 77% 42%; /* #17BEB1 darker teal */
   --brand-blue: 217 91% 60%;     /* #2563EB electric blue (secondary) */
 
   --positive: 142 71% 45%;       /* #22C55E emerald */
-  --negative: 0 84% 60%;         /* #EF4444 soft red */
-  --warning: 43 96% 56%;         /* #F59E0B amber (sparingly) */
+  --negative: 354 70% 67%;       /* #FF5A7A danger rose */
+  --warning: 45 95% 50%;         /* #F5B400 amber */
+
+  /* Focus */
+  --focus: 177 77% 52%;          /* #20E3D2 focus ring */
 
   /* Gradients */
   --grad-hero: linear-gradient(135deg, hsl(220 42% 11%) 0%, hsl(218 25% 20%) 60%, hsl(217 91% 60%) 100%);
