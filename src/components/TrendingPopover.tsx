@@ -15,8 +15,7 @@ const trendingQuestions = [
   "How has Luka Dončić performed in his last 5 games?",
   "Is Tatum over 6.5 rebounds a good value?",
   "Compare Jokić vs Embiid over the last 10 games.",
-  "How do injuries and pace affect tonight's total for Lakers vs Warriors?",
-  "What's the best prop bet for tonight's primetime game?"
+  "How do injuries and pace affect tonight's Lakers vs Warriors total?"
 ];
 
 export function TrendingPopover({ open, onPick, anchorRef, onClose }: TrendingPopoverProps) {

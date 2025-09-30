@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import AskFyneticMinimal from "./AskFyneticMinimal";
 import ExplorePlayers from "./ExplorePlayers";
 import PropBuilderNew from "./PropBuilderNew";
 
 const Index = () => {
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState("ask");
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/ask") setCurrentPage("ask");
+    else if (path === "/players") setCurrentPage("players");
+    else if (path === "/props") setCurrentPage("props");
+  }, [location.pathname]);
+
+  const handlePageChange = (page: string) => {
+    setCurrentPage(page);
+    // Navigate using browser history
+    if (page === "ask") window.history.pushState(null, "", "/ask");
+    else if (page === "players") window.history.pushState(null, "", "/players");
+    else if (page === "props") window.history.pushState(null, "", "/props");
+  };
 
   const renderPage = () => {
     switch (currentPage) {
@@ -22,7 +39,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-bg">
-      <MinimalHeader currentPage={currentPage} onPageChange={setCurrentPage} />
+      <MinimalHeader currentPage={currentPage} onPageChange={handlePageChange} />
       <main>
         {renderPage()}
       </main>

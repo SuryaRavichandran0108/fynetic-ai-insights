@@ -45,9 +45,13 @@ export default function AskFyneticMinimal() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showTrending, setShowTrending] = useState(false);
-  const [showContextDock, setShowContextDock] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Kill switches for minimal UI
+  const ENABLE_CONTEXT_DOCK = false;
+  const ENABLE_CHIPS = false;
+  const ENABLE_WELCOME = false;
 
   // Check for prefilled text from navigation
   useEffect(() => {
@@ -55,18 +59,6 @@ export default function AskFyneticMinimal() {
       setInputValue(location.state.prefilledText);
     }
   }, [location.state]);
-
-  // Keyboard shortcut to toggle context dock for development
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        setShowContextDock(prev => !prev);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -121,21 +113,23 @@ export default function AskFyneticMinimal() {
   };
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col">
-      {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-4 py-6">
+    <div className="min-h-[calc(100vh-58px)] grid place-items-end bg-bg">
+      <div className="max-w-[900px] mx-auto w-full px-4">
+        {/* Chat Area */}
+        <div className="mb-6">
           {messages.length === 0 ? (
             <div className="h-[60vh] flex items-center justify-center">
-              <div className="text-center">
-                <MessageSquare className="h-12 w-12 text-accent-teal/60 mx-auto mb-4" />
-                <h2 className="text-xl font-medium text-text-primary mb-2">
-                  Ask FYNETIC anything
-                </h2>
-                <p className="text-text-muted max-w-md">
-                  Get analytics on players, props, matchups, or any sports question.
-                </p>
-              </div>
+              {ENABLE_WELCOME && (
+                <div className="text-center">
+                  <MessageSquare className="h-12 w-12 text-accent-teal/60 mx-auto mb-4" />
+                  <h2 className="text-xl font-medium text-text-primary mb-2">
+                    Ask FYNETIC anything
+                  </h2>
+                  <p className="text-text-muted max-w-md">
+                    Get analytics on players, props, matchups, or any sports question.
+                  </p>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-6">
@@ -149,10 +143,10 @@ export default function AskFyneticMinimal() {
                 >
                   <div
                     className={cn(
-                      "max-w-2xl rounded-lg px-4 py-3 border-l-2",
+                      "max-w-2xl rounded-lg px-4 py-3",
                       message.role === "user"
-                        ? "bg-surface border-l-accent-teal ml-12"
-                        : "bg-surface/50 border-l-accent-teal/50"
+                        ? "bg-surface ml-12"
+                        : "bg-surface/50 border-l-2 border-l-accent-teal"
                     )}
                   >
                     <div className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
@@ -167,7 +161,7 @@ export default function AskFyneticMinimal() {
 
               {isLoading && (
                 <div className="flex gap-3 justify-start">
-                  <div className="bg-surface/50 border-l-2 border-l-accent-teal/50 rounded-lg px-4 py-3">
+                  <div className="bg-surface/50 border-l-2 border-l-accent-teal rounded-lg px-4 py-3">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                       <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]"></div>
@@ -180,11 +174,9 @@ export default function AskFyneticMinimal() {
             </div>
           )}
         </div>
-      </div>
 
-      {/* Input Area */}
-      <div className="border-t border-border/30 bg-surface/30 backdrop-blur p-4">
-        <div className="max-w-4xl mx-auto">
+        {/* Input Area */}
+        <div className="sticky bottom-0 pb-6">
           <div className="flex gap-3">
             <Input
               ref={inputRef}
@@ -209,15 +201,15 @@ export default function AskFyneticMinimal() {
             Analytics for information only — not betting advice.
           </p>
         </div>
-      </div>
 
-      {/* Trending Popover */}
-      <TrendingPopover
-        open={showTrending}
-        onPick={handleTrendingPick}
-        anchorRef={inputRef}
-        onClose={() => setShowTrending(false)}
-      />
+        {/* Trending Popover */}
+        <TrendingPopover
+          open={showTrending}
+          onPick={handleTrendingPick}
+          anchorRef={inputRef}
+          onClose={() => setShowTrending(false)}
+        />
+      </div>
     </div>
   );
 }
