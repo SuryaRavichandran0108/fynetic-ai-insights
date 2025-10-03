@@ -174,30 +174,33 @@ export default function AskFyneticMinimal() {
             )}
           </div>
 
-          {/* Input Area */}
-          <div className="sticky bottom-0 pb-6">
-            <div className="flex gap-3">
-              <Input
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask anything about players, props, matchups…"
-                className="flex-1 bg-surface border-border/50 focus:border-accent-teal"
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                onFocus={handleInputFocus}
-              />
-              <Button
-                onClick={handleSend}
-                disabled={!inputValue.trim() || isLoading}
-                className="bg-accent-teal hover:bg-accent-teal-700 text-bg"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
+          {/* Input Area - aligned to chat column */}
+          <div className="sticky bottom-0 bg-[var(--bg)]/80 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg)]/60">
+            <div className={cn("pb-6", showTrendingPanel && messages.length === 0 ? "" : "max-w-[900px] mx-auto")}>
+              <div className="flex items-center gap-2 rounded-xl border border-border/50 bg-surface px-3 py-2 focus-within:ring-1 focus-within:ring-white/20">
+                <Input
+                  ref={inputRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Ask anything about players, props, matchups…"
+                  className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  onFocus={handleInputFocus}
+                />
+                <Button
+                  onClick={handleSend}
+                  disabled={!inputValue.trim() || isLoading}
+                  className="bg-accent-teal hover:bg-accent-teal-700 text-bg shrink-0"
+                  size="sm"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
 
-            <p className="text-xs text-text-muted text-center mt-3">
-              Analytics for information only — not betting advice.
-            </p>
+              <p className="text-xs text-white/40 text-center mt-2">
+                Analytics for information only — not betting advice.
+              </p>
+            </div>
           </div>
         </div>
       </div>

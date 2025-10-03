@@ -34,14 +34,14 @@ interface TrendingPanelProps {
 
 export function TrendingPanel({ onSelect }: TrendingPanelProps) {
   return (
-    <motion.div
+    <motion.aside
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -8 }}
       transition={{ duration: 0.2 }}
-      className="space-y-4"
+      className="hidden md:block sticky top-[calc(58px+40px+16px)] max-h-[calc(100vh-58px-40px-24px)] overflow-y-auto pr-1"
     >
-      <h3 className="text-sm font-medium text-text-muted px-1">Trending today</h3>
+      <h3 className="text-xs uppercase tracking-[0.12em] text-white/50 mb-3">Trending today</h3>
       <div className="space-y-3">
         {trendingData.map((item) => (
           <TrendingCard
@@ -53,6 +53,6 @@ export function TrendingPanel({ onSelect }: TrendingPanelProps) {
           />
         ))}
       </div>
-    </motion.div>
+    </motion.aside>
   );
 }

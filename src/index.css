@@ -13,6 +13,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .ticker-viewport {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* FYNETIC Sports Analytics Design System - Elegant Dark with Cyber Teal
 All colors MUST be HSL format for proper theming.
 */

@@ -27,9 +27,10 @@ export function MinimalHeader({ currentPage, onPageChange }: MinimalHeaderProps)
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30",
                   isActive 
-                    ? "bg-[var(--surface)] ring-1 ring-white/30 shadow-[0_0_12px_rgba(255,255,255,0.35)] text-text-primary" 
-                    : "text-text-muted hover:text-text-primary hover:ring-1 hover:ring-white/20 hover:shadow-[0_0_8px_rgba(255,255,255,0.2)]"
+                    ? "bg-[var(--surface)] text-white ring-1 ring-white/20 shadow-[0_0_0_2px_rgba(255,255,255,0.04),0_0_18px_rgba(255,255,255,0.10)]" 
+                    : "text-white/70 hover:text-white hover:ring-1 hover:ring-white/12 hover:shadow-[0_0_12px_rgba(255,255,255,0.06)]"
                 )}
               >
                 <Icon className="h-4 w-4" />
