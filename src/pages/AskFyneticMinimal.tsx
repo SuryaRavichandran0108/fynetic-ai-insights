@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
-import { TrendingPopover } from "@/components/TrendingPopover";
+import { TrendingPanel } from "@/components/trending/TrendingPanel";
 import { getConfidenceTier, getConfidenceColor } from "@/utils/confidence";
 
 interface Message {
@@ -44,14 +45,9 @@ export default function AskFyneticMinimal() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showTrending, setShowTrending] = useState(false);
+  const [showTrendingPanel, setShowTrendingPanel] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Kill switches for minimal UI
-  const ENABLE_CONTEXT_DOCK = false;
-  const ENABLE_CHIPS = false;
-  const ENABLE_WELCOME = false;
 
   // Check for prefilled text from navigation
   useEffect(() => {
@@ -81,7 +77,7 @@ export default function AskFyneticMinimal() {
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
-    setShowTrending(false);
+    setShowTrendingPanel(false);
 
     // Simulate AI response
     setTimeout(() => {
@@ -97,118 +93,113 @@ export default function AskFyneticMinimal() {
     }, 2000);
   };
 
-  const handleInputFocus = () => {
-    setShowTrending(true);
-  };
-
-  const handleInputBlur = () => {
-    // Delay to allow clicking trending items
-    setTimeout(() => setShowTrending(false), 150);
-  };
-
-  const handleTrendingPick = (text: string) => {
-    setInputValue(text);
-    setShowTrending(false);
+  const handleTrendingSelect = (question: string) => {
+    setInputValue(question);
+    setShowTrendingPanel(false);
     inputRef.current?.focus();
   };
 
-  return (
-    <div className="min-h-[calc(100vh-58px)] grid place-items-end bg-bg">
-      <div className="max-w-[900px] mx-auto w-full px-4">
-        {/* Chat Area */}
-        <div className="mb-6">
-          {messages.length === 0 ? (
-            <div className="h-[60vh] flex items-center justify-center">
-              {ENABLE_WELCOME && (
-                <div className="text-center">
-                  <MessageSquare className="h-12 w-12 text-accent-teal/60 mx-auto mb-4" />
-                  <h2 className="text-xl font-medium text-text-primary mb-2">
-                    Ask FYNETIC anything
-                  </h2>
-                  <p className="text-text-muted max-w-md">
-                    Get analytics on players, props, matchups, or any sports question.
-                  </p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={cn(
-                    "flex gap-3",
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "max-w-2xl rounded-lg px-4 py-3",
-                      message.role === "user"
-                        ? "bg-surface ml-12"
-                        : "bg-surface/50 border-l-2 border-l-accent-teal"
-                    )}
-                  >
-                    <div className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
-                      {message.content}
-                    </div>
-                    {message.confidence !== undefined && (
-                      <ConfidenceIndicator value={message.confidence} />
-                    )}
-                  </div>
-                </div>
-              ))}
+  const handleInputFocus = () => {
+    setShowTrendingPanel(false);
+  };
 
-              {isLoading && (
-                <div className="flex gap-3 justify-start">
-                  <div className="bg-surface/50 border-l-2 border-l-accent-teal rounded-lg px-4 py-3">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                      <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                      <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce"></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
+  return (
+    <div className="min-h-[calc(100vh-58px-40px)] bg-bg">
+      <div 
+        className={cn(
+          "max-w-[1200px] mx-auto px-4 py-6 transition-all duration-300",
+          showTrendingPanel && messages.length === 0
+            ? "grid md:grid-cols-[minmax(260px,340px)_minmax(0,1fr)] gap-6"
+            : "grid grid-cols-1"
+        )}
+      >
+        {/* Left Column: Trending Panel (Desktop only, initial load) */}
+        <AnimatePresence>
+          {showTrendingPanel && messages.length === 0 && (
+            <div className="hidden md:block">
+              <TrendingPanel onSelect={handleTrendingSelect} />
             </div>
           )}
-        </div>
+        </AnimatePresence>
 
-        {/* Input Area */}
-        <div className="sticky bottom-0 pb-6">
-          <div className="flex gap-3">
-            <Input
-              ref={inputRef}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask anything about players, props, matchups…"
-              className="flex-1 bg-surface border-border/50 focus:border-accent-teal"
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-            <Button
-              onClick={handleSend}
-              disabled={!inputValue.trim() || isLoading}
-              className="bg-accent-teal hover:bg-accent-teal-700 text-bg"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+        {/* Right Column: Chat */}
+        <div className="flex flex-col min-h-[calc(100vh-58px-40px-3rem)]">
+          {/* Chat Area */}
+          <div className="flex-1 mb-6">
+            {messages.length === 0 ? (
+              <div className="h-[60vh] flex items-center justify-center">
+                {/* Empty state - no welcome message */}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={cn(
+                      "flex gap-3",
+                      message.role === "user" ? "justify-end" : "justify-start"
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "max-w-2xl rounded-lg px-4 py-3",
+                        message.role === "user"
+                          ? "bg-surface ml-12"
+                          : "bg-surface/50 border-l-2 border-l-accent-teal"
+                      )}
+                    >
+                      <div className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
+                        {message.content}
+                      </div>
+                      {message.confidence !== undefined && (
+                        <ConfidenceIndicator value={message.confidence} />
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {isLoading && (
+                  <div className="flex gap-3 justify-start">
+                    <div className="bg-surface/50 border-l-2 border-l-accent-teal rounded-lg px-4 py-3">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                        <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                        <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            )}
           </div>
 
-          <p className="text-xs text-text-muted text-center mt-3">
-            Analytics for information only — not betting advice.
-          </p>
-        </div>
+          {/* Input Area */}
+          <div className="sticky bottom-0 pb-6">
+            <div className="flex gap-3">
+              <Input
+                ref={inputRef}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask anything about players, props, matchups…"
+                className="flex-1 bg-surface border-border/50 focus:border-accent-teal"
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                onFocus={handleInputFocus}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={!inputValue.trim() || isLoading}
+                className="bg-accent-teal hover:bg-accent-teal-700 text-bg"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
 
-        {/* Trending Popover */}
-        <TrendingPopover
-          open={showTrending}
-          onPick={handleTrendingPick}
-          anchorRef={inputRef}
-          onClose={() => setShowTrending(false)}
-        />
+            <p className="text-xs text-text-muted text-center mt-3">
+              Analytics for information only — not betting advice.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

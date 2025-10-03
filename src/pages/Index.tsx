@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
+import { GameTicker } from "@/components/ticker/GameTicker";
 import AskFyneticMinimal from "./AskFyneticMinimal";
 import ExplorePlayers from "./ExplorePlayers";
 import PropBuilderNew from "./PropBuilderNew";
@@ -40,6 +41,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-bg">
       <MinimalHeader currentPage={currentPage} onPageChange={handlePageChange} />
+      <GameTicker />
       <main>
         {renderPage()}
       </main>

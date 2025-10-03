@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Search, MessageSquare, Target } from "lucide-react";
+import { MessageSquare, Search, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MinimalHeaderProps {
@@ -9,48 +8,36 @@ interface MinimalHeaderProps {
 
 export function MinimalHeader({ currentPage, onPageChange }: MinimalHeaderProps) {
   const navigationItems = [
-    { id: "players", label: "Explore Players", icon: Search, position: "left" },
-    { id: "ask", label: "Ask FYNETIC", icon: MessageSquare, position: "center" },
-    { id: "props", label: "Prop Builder", icon: Target, position: "right" },
+    { id: "ask", label: "Ask FYNETIC", icon: MessageSquare },
+    { id: "players", label: "Explore Players", icon: Search },
+    { id: "props", label: "Prop Builder", icon: Target },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-surface/80 backdrop-blur supports-[backdrop-filter]:bg-surface/60">
-      <div className="container flex h-14 items-center justify-between px-4">
-        {/* Logo on non-Ask pages only */}
-        <div className="flex-1">
-          {currentPage !== "ask" && (
-            <img src="/brand/fynetic-logo-primary.png" alt="FYNETIC" className="h-7 w-auto" />
-          )}
-        </div>
-
-        {/* Centered Navigation */}
-        <nav className="flex items-center gap-1">
+    <header className="sticky top-0 z-50 w-full border-b border-[#1b2433] bg-[var(--surface)] h-[58px]">
+      <div className="max-w-[1100px] mx-auto px-4 h-full flex items-center justify-center">
+        <nav className="flex items-center gap-2">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
             return (
-              <Button
+              <button
                 key={item.id}
-                variant={isActive ? "default" : "ghost"}
-                size="sm"
                 onClick={() => onPageChange(item.id)}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "gap-2 font-medium transition-all duration-200",
+                  "px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2",
                   isActive 
-                    ? "bg-accent-teal text-bg hover:bg-accent-teal-700" 
-                    : "text-text-muted hover:text-text-primary hover:bg-surface"
+                    ? "bg-[var(--surface)] ring-1 ring-white/30 shadow-[0_0_12px_rgba(255,255,255,0.35)] text-text-primary" 
+                    : "text-text-muted hover:text-text-primary hover:ring-1 hover:ring-white/20 hover:shadow-[0_0_8px_rgba(255,255,255,0.2)]"
                 )}
               >
                 <Icon className="h-4 w-4" />
                 <span className="hidden sm:inline">{item.label}</span>
-              </Button>
+              </button>
             );
           })}
         </nav>
-
-        {/* Right spacer */}
-        <div className="flex-1" />
       </div>
     </header>
   );
