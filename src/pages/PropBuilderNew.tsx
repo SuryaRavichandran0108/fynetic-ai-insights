@@ -4,6 +4,7 @@ import PremiumPaywall from "@/components/paywall/PremiumPaywall";
 import { VegasLinesService } from "@/lib/vegas/VegasLinesService";
 import { loadRecentProps, saveRecentProp } from "@/lib/storage/recentProps";
 import PropTicketCard from "@/components/prop/PropTicketCard";
+import SectionCard from "@/components/ui/SectionCard";
 import type { Market, PropTicket, Side, Sport, League, VegasBaseline } from "@/types/props";
 import { v4 as uuid } from "uuid";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -82,225 +83,228 @@ export default function PropBuilderNew() {
 
   if (!isPremium) return <PremiumPaywall />;
 
+  const hasBaseline = !!vegas;
+  const numericLine = Number(line);
+  const edge = hasBaseline && !isNaN(numericLine) ? (numericLine - vegas!.line) : null;
+
   return (
-    <div className="min-h-screen bg-[var(--background)]">
-      <div className="max-w-[1100px] mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-semibold mb-1">Prop Builder</h1>
-          <p className="text-sm text-white/60">
-            Build your props with Vegas baselines, then discuss with FYNETIC.
-          </p>
-        </div>
+    <div className="max-w-[1100px] mx-auto px-4 py-6">
+      <h1 className="text-2xl font-semibold mb-2">Prop Builder</h1>
+      <p className="text-white/60 mb-6">Build your props with Vegas baselines, then discuss with FYNETIC.</p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main form */}
-          <div className="lg:col-span-2">
-            <div className="rounded-2xl border border-white/10 bg-[var(--surface)]/60 p-6">
-              <h2 className="text-lg font-medium mb-4">New Prop</h2>
-              <div className="space-y-4">
-                {/* Sport */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Sport</label>
-                  <Select value={sport} onValueChange={(v) => setSport(v as Sport)}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select sport" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SPORTS.map((s) => (
-                        <SelectItem key={s} value={s}>
-                          {s}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+      <div className="grid md:grid-cols-[minmax(0,1fr)_360px] gap-6">
+        {/* Main form */}
+        <SectionCard title="New Prop">
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* Sport */}
+            <div>
+              <label className="block text-sm text-white/70 mb-1.5">Sport</label>
+              <Select value={sport} onValueChange={(v) => setSport(v as Sport)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select sport" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SPORTS.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-                {/* League */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">League</label>
-                  <Select value={league} onValueChange={(v) => setLeague(v as League)}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select league" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {LEAGUES.map((l) => (
-                        <SelectItem key={l} value={l}>
-                          {l}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* League */}
+            <div>
+              <label className="block text-sm text-white/70 mb-1.5">League</label>
+              <Select value={league} onValueChange={(v) => setLeague(v as League)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select league" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LEAGUES.map((l) => (
+                    <SelectItem key={l} value={l}>
+                      {l}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-                {/* Player */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Player</label>
-                  <input
-                    type="text"
-                    value={player}
-                    onChange={(e) => setPlayer(e.target.value)}
-                    placeholder="e.g., Jayson Tatum"
-                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-                  />
-                </div>
+            {/* Player */}
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/70 mb-1.5">Player</label>
+              <input
+                type="text"
+                value={player}
+                onChange={(e) => setPlayer(e.target.value)}
+                placeholder="e.g., Jayson Tatum"
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+              <p className="mt-1 text-[12px] text-white/45">Full name preferred for Vegas lookup.</p>
+            </div>
 
-                {/* Team (optional) */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Team (optional)</label>
-                  <input
-                    type="text"
-                    value={team}
-                    onChange={(e) => setTeam(e.target.value)}
-                    placeholder="e.g., BOS"
-                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-                  />
-                </div>
+            {/* Team (optional) */}
+            <div>
+              <label className="block text-sm text-white/70 mb-1.5">Team (optional)</label>
+              <input
+                type="text"
+                value={team}
+                onChange={(e) => setTeam(e.target.value)}
+                placeholder="e.g., BOS"
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+            </div>
 
-                {/* Market */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Market</label>
-                  <Select value={market} onValueChange={(v) => setMarket(v as Market)}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select market" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {MARKETS.map((m) => (
-                        <SelectItem key={m} value={m}>
-                          {m}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* Market */}
+            <div>
+              <label className="block text-sm text-white/70 mb-1.5">Market</label>
+              <Select value={market} onValueChange={(v) => setMarket(v as Market)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select market" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MARKETS.map((m) => (
+                    <SelectItem key={m} value={m}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-                {/* Line */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Line</label>
-                  <input
-                    type="text"
-                    value={line}
-                    onChange={(e) => setLine(e.target.value)}
-                    placeholder="e.g., 8.5"
-                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-                  />
-                  {vegas && (
-                    <div className="text-[12px] text-white/70 mt-1">
-                      Vegas: <span className="text-white">{vegas.line}</span>
-                      {typeof vegas.odds === "number" ? <> @ {vegas.odds}</> : null}
-                      <span className="text-white/45">
-                        {" "}
-                        • {new Date(vegas.asOf).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                      </span>
-                    </div>
+            {/* Line */}
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/70 mb-1.5">Line</label>
+              <input
+                type="text"
+                value={line}
+                onChange={(e) => setLine(e.target.value)}
+                placeholder="e.g., 8.5"
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+              {/* Vegas chip + edge */}
+              {vegas && (
+                <div className="mt-2 flex items-center gap-3 text-[12px] flex-wrap">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10">
+                    Vegas: <span className="text-white/90">{vegas.line}</span>
+                    {typeof vegas.odds === "number" && <span className="text-white/70">@ {vegas.odds}</span>}
+                    <span className="text-white/45">• {new Date(vegas.asOf).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                  </span>
+                  {edge !== null && (
+                    <span className={
+                      "inline-flex items-center gap-1 px-2 py-0.5 rounded-full border " +
+                      (edge > 0.01 ? "border-[var(--accent-teal)] text-[var(--accent-teal)] bg-[var(--accent-teal)]/10" :
+                       edge < -0.01 ? "border-white/15 text-white/70 bg-white/[0.04]" :
+                                      "border-white/10 text-white/60 bg-white/[0.04]")}
+                    >
+                      {edge > 0 ? `+${edge.toFixed(1)}` : edge.toFixed(1)} vs Vegas
+                    </span>
                   )}
-                  {isFetchingVegas && <div className="text-[12px] text-white/50 mt-1">Checking Vegas baseline…</div>}
                 </div>
+              )}
+              {isFetchingVegas && <div className="mt-1 text-[12px] text-white/50">Checking Vegas baseline…</div>}
+            </div>
 
-                {/* Side */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Side</label>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setSide("over")}
-                      className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
-                        side === "over"
-                          ? "border-[var(--accent-teal)] bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]"
-                          : "border-white/10 text-white/70 hover:border-white/20"
-                      }`}
-                    >
-                      Over
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSide("under")}
-                      className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
-                        side === "under"
-                          ? "border-[var(--accent-teal)] bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]"
-                          : "border-white/10 text-white/70 hover:border-white/20"
-                      }`}
-                    >
-                      Under
-                    </button>
-                  </div>
-                </div>
-
-                {/* Odds (optional) */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Odds (optional)</label>
-                  <input
-                    type="text"
-                    value={odds}
-                    onChange={(e) => setOdds(e.target.value)}
-                    placeholder="e.g., -110"
-                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-                  />
-                </div>
-
-                {/* Notes (optional) */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Notes (optional)</label>
-                  <textarea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Any additional context..."
-                    rows={3}
-                    className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
-                  />
-                </div>
-
-                {/* Mock toggle */}
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="mockOnly"
-                    checked={mockOnly}
-                    onChange={(e) => setMockOnly(e.target.checked)}
-                    className="w-4 h-4 rounded border-white/10"
-                  />
-                  <label htmlFor="mockOnly" className="text-sm text-white/70">
-                    Mock prop (practice mode)
-                  </label>
-                </div>
-
-                {/* Create button */}
+            {/* Side */}
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/70 mb-1.5">Side</label>
+              <div className="mt-1 flex rounded-lg border border-white/10 overflow-hidden w-fit">
                 <button
                   type="button"
-                  onClick={onCreate}
-                  disabled={!isValid}
-                  className="w-full px-4 py-2.5 rounded-lg bg-[var(--accent-teal)]/90 hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed text-black font-medium transition-all"
+                  onClick={() => setSide("over")}
+                  className={"px-4 py-2 text-sm transition-colors " + (side === "over"
+                    ? "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)] border-r border-white/10"
+                    : "text-white/70 hover:bg-white/[0.04] border-r border-white/10")}
                 >
-                  Create Prop
+                  Over
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSide("under")}
+                  className={"px-4 py-2 text-sm transition-colors " + (side === "under"
+                    ? "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]"
+                    : "text-white/70 hover:bg-white/[0.04]")}
+                >
+                  Under
                 </button>
               </div>
             </div>
-          </div>
 
-          {/* Recent Props sidebar */}
-          <div className="lg:col-span-1">
-            <div className="rounded-2xl border border-white/10 bg-[var(--surface)]/60 p-6">
-              <h2 className="text-lg font-medium mb-4">Recent Props</h2>
-              <div className="space-y-3">
-                {recent.length === 0 ? (
-                  <div className="text-sm text-white/60">No recent props yet.</div>
-                ) : (
-                  recent.map((t) => (
-                    <PropTicketCard
-                      key={t.id}
-                      ticket={t}
-                      baseline={vegas && vegas.player === t.player && vegas.market === t.market ? vegas : null}
-                    />
-                  ))
-                )}
-              </div>
+            {/* Odds */}
+            <div>
+              <label className="block text-sm text-white/70 mb-1.5">Odds (optional)</label>
+              <input
+                type="text"
+                value={odds}
+                onChange={(e) => setOdds(e.target.value)}
+                placeholder="e.g., -110"
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              />
+              <p className="mt-1 text-[12px] text-white/45">American odds. Positive or negative values allowed.</p>
+            </div>
+
+            {/* Notes */}
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/70 mb-1.5">Notes (optional)</label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={3}
+                placeholder="Any additional context..."
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-[var(--surface)] text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 resize-none"
+              />
+            </div>
+
+            {/* Mock toggle */}
+            <div className="md:col-span-2 flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="mockOnly"
+                checked={mockOnly}
+                onChange={(e) => setMockOnly(e.target.checked)}
+                className="w-4 h-4 rounded border-white/10"
+              />
+              <label htmlFor="mockOnly" className="text-[13px] text-white/70">
+                Mock prop (practice mode)
+              </label>
             </div>
           </div>
-        </div>
 
-        {/* Legal disclaimer */}
-        <div className="mt-6 text-center text-xs text-white/45">
-          Analytics for information only — not betting advice.
-        </div>
+          {/* Submit */}
+          <div className="mt-5">
+            <button
+              type="button"
+              disabled={!isValid}
+              onClick={onCreate}
+              className={
+                "px-4 py-2.5 rounded-lg font-medium transition-all " +
+                (isValid
+                  ? "bg-[var(--accent-teal)]/90 text-black hover:brightness-110"
+                  : "bg-white/[0.06] text-white/40 cursor-not-allowed")
+              }
+            >
+              Create Prop
+            </button>
+          </div>
+        </SectionCard>
+
+        {/* Recent Props sidebar */}
+        <SectionCard title="Recent Props">
+          {recent.length === 0 ? (
+            <div className="text-sm text-white/60">No recent props yet.</div>
+          ) : (
+            <div className="space-y-3">
+              {recent.map((t) => (
+                <PropTicketCard key={t.id} ticket={t} />
+              ))}
+            </div>
+          )}
+          <div className="mt-4 text-xs text-white/45">You can analyze any ticket immediately in Ask FYNETIC.</div>
+        </SectionCard>
+      </div>
+
+      <div className="text-xs text-white/45 mt-6 text-center">
+        Analytics for information only — not betting advice.
       </div>
     </div>
   );
