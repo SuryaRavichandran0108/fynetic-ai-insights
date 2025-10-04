@@ -8,7 +8,7 @@ const trendingData = [
     playerName: "Luka Dončić",
     propLine: "3P over 2.5",
     team: "DAL",
-    avatarSrc: "/avatars/luka-doncic.png",
+    avatarSrc: "/avatars/Luka.png",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const trendingData = [
     playerName: "Jayson Tatum",
     propLine: "REB o/u 6.5",
     team: "BOS",
-    avatarSrc: "/avatars/jayson-tatum.png",
+    avatarSrc: "/avatars/Tatum.png",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const trendingData = [
     playerName: "Nikola Jokić",
     propLine: "PTS+REB+AST o/u 44.5",
     team: "DEN",
-    avatarSrc: "/avatars/nikola-jokic.png",
+    avatarSrc: "/avatars/Jokic.png",
   },
   {
     id: 4,
@@ -32,7 +32,7 @@ const trendingData = [
     playerName: "Joel Embiid",
     propLine: "Total o/u 235.5",
     team: "PHI",
-    avatarSrc: "/avatars/joel-embiid.png",
+    avatarSrc: "/avatars/Embiid.png",
   },
 ];
 

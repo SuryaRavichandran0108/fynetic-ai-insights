@@ -30,16 +30,17 @@ export function TrendingCard({ question, playerName, propLine, team, avatarSrc, 
           </div>
         </div>
         
-        {/* Avatar circle */}
+        {/* Avatar circle (image or fallback) */}
         <div className="relative shrink-0">
-          <div className="size-12 rounded-full ring-1 ring-white/10 overflow-hidden bg-gradient-to-br from-white/8 to-white/2 grid place-items-center">
+          <div className="size-12 p-0.5 rounded-full overflow-hidden ring-1 ring-white/12 bg-gradient-to-br from-white/8 to-white/2 grid place-items-center">
             {avatarSrc ? (
               <img
                 src={avatarSrc}
-                alt=""
-                className="w-full h-full object-cover"
+                alt={`${playerName} avatar`}
+                className="w-full h-full object-contain"
                 loading="eager"
                 decoding="async"
+                fetchPriority="high"
               />
             ) : (
               <span className="text-[11px] tracking-wide text-white/70">{team || "FY"}</span>
