@@ -32,41 +32,20 @@ export function TrendingCard({ question, playerName, propLine, team, avatarSrc, 
         
         {/* Avatar circle (image or fallback) */}
         <div className="relative shrink-0">
-          {/* The circle itself */}
           <div className="size-12 p-0.5 rounded-full overflow-hidden ring-1 ring-white/12 bg-gradient-to-br from-white/8 to-white/2 grid place-items-center">
             {avatarSrc ? (
               <img
                 src={avatarSrc}
-                alt={`${playerName} avatar`}
+                alt={playerName ? `${playerName} avatar` : "Player avatar"}
                 className="w-full h-full object-contain"
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
               />
             ) : (
-              <span className="text-[11px] tracking-wide text-white/70">{team || "FY"}</span>
+              <span className="text-[11px] tracking-wide text-white/70">FY</span>
             )}
           </div>
-
-          {/* Team badge — placed on the wrapper, NOT inside the overflow-hidden circle */}
-          {team && (
-            <span
-              className="
-                absolute -bottom-1.5 -right-1.5 z-10
-                inline-flex items-center justify-center
-                h-5 min-w-[30px] px-1.5
-                rounded-full bg-[var(--bg)]/95 text-white
-                text-[11px] font-medium tracking-[0.04em]
-                border border-white/20
-                shadow-[0_0_0_1px_rgba(0,0,0,0.25),0_4px_12px_rgba(0,0,0,0.45)]
-                pointer-events-none
-              "
-              aria-label={`Team ${team}`}
-              title={team}
-            >
-              {(team || "FY").toUpperCase()}
-            </span>
-          )}
         </div>
 
         {/* Chevron */}
