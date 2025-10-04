@@ -8,6 +8,9 @@ import { useLocation } from "react-router-dom";
 import { TrendingPanel } from "@/components/trending/TrendingPanel";
 import { getConfidenceTier, getConfidenceColor } from "@/utils/confidence";
 import type { ExploreContextPayload } from "@/types/explore";
+import type { PropContextPayload } from "@/types/props";
+
+type AskIncomingContext = ExploreContextPayload | PropContextPayload | null;
 
 interface Message {
   id: string;
@@ -43,7 +46,7 @@ function ConfidenceIndicator({ value }: ConfidenceIndicatorProps) {
 
 export default function AskFyneticMinimal() {
   const location = useLocation();
-  const incomingContext = (location.state?.context ?? null) as ExploreContextPayload | null;
+  const incomingContext = (location.state?.context ?? null) as AskIncomingContext;
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
