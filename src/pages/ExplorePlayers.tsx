@@ -173,12 +173,12 @@ function PlayerCard({ player }: { player: Player }) {
 
 export default function ExplorePlayers() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState("all");
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
 
   const filteredPlayers = mockPlayers.filter(player =>
     player.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    (selectedTeam === "" || player.team === selectedTeam)
+    (selectedTeam === "all" || player.team === selectedTeam)
   );
 
   return (
@@ -206,7 +206,7 @@ export default function ExplorePlayers() {
                 <SelectValue placeholder="Team" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Teams</SelectItem>
+                <SelectItem value="all">All Teams</SelectItem>
                 <SelectItem value="BOS">Boston</SelectItem>
                 <SelectItem value="DAL">Dallas</SelectItem>
                 <SelectItem value="DEN">Denver</SelectItem>
