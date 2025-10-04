@@ -45,9 +45,11 @@ export default function AskFyneticMinimal() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showTrendingPanel, setShowTrendingPanel] = useState(true);
+  const [showTrending, setShowTrending] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const hasMessages = messages.length > 0;
 
   // Check for prefilled text from navigation
   useEffect(() => {
@@ -77,7 +79,6 @@ export default function AskFyneticMinimal() {
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
-    setShowTrendingPanel(false);
 
     // Simulate AI response
     setTimeout(() => {
@@ -95,12 +96,22 @@ export default function AskFyneticMinimal() {
 
   const handleTrendingSelect = (question: string) => {
     setInputValue(question);
-    setShowTrendingPanel(false);
+    setShowTrending(false);
     inputRef.current?.focus();
   };
 
   const handleInputFocus = () => {
-    setShowTrendingPanel(false);
+    setShowTrending(false);
+  };
+
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      if (!hasMessages) setShowTrending(true);
+    }, 0);
+  };
+
+  const handleSendMouseDown: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -108,14 +119,14 @@ export default function AskFyneticMinimal() {
       <div 
         className={cn(
           "max-w-[1200px] mx-auto px-4 py-6 transition-all duration-300",
-          showTrendingPanel && messages.length === 0
+          showTrending
             ? "grid md:grid-cols-[minmax(260px,340px)_minmax(0,1fr)] gap-6"
             : "grid grid-cols-1"
         )}
       >
-        {/* Left Column: Trending Panel (Desktop only, initial load) */}
+        {/* Left Column: Trending Panel (Desktop only) */}
         <AnimatePresence>
-          {showTrendingPanel && messages.length === 0 && (
+          {showTrending && (
             <div className="hidden md:block">
               <TrendingPanel onSelect={handleTrendingSelect} />
             </div>
@@ -124,6 +135,25 @@ export default function AskFyneticMinimal() {
 
         {/* Right Column: Chat */}
         <div className="flex flex-col min-h-[calc(100vh-58px-40px-3rem)]">
+          {/* Manual "Show trending" button (desktop, during conversation) */}
+          {hasMessages && !showTrending && (
+            <div className="hidden md:flex items-center mb-3">
+              <button
+                type="button"
+                onClick={() => setShowTrending(true)}
+                className="inline-flex items-center gap-1.5 text-[13px] text-white/70 hover:text-white/90
+                           border border-white/10 rounded-full px-3 py-1.5
+                           bg-[var(--surface)]/60 hover:bg-white/[0.04]
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25
+                           transition-colors"
+                aria-pressed={showTrending}
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                Show trending
+              </button>
+            </div>
+          )}
+
           {/* Chat Area */}
           <div className="flex-1 mb-6">
             {messages.length === 0 ? (
@@ -176,7 +206,7 @@ export default function AskFyneticMinimal() {
 
           {/* Input Area - aligned to chat column */}
           <div className="sticky bottom-0 bg-[var(--bg)]/80 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg)]/60">
-            <div className={cn("pb-6", showTrendingPanel && messages.length === 0 ? "" : "max-w-[900px] mx-auto")}>
+            <div className={cn("pb-6", showTrending && messages.length === 0 ? "" : "max-w-[900px] mx-auto")}>
               <div className="flex items-center gap-2 rounded-xl border border-border/50 bg-surface px-3 py-2 focus-within:ring-1 focus-within:ring-white/20">
                 <Input
                   ref={inputRef}
@@ -186,8 +216,10 @@ export default function AskFyneticMinimal() {
                   className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
                 />
                 <Button
+                  onMouseDown={handleSendMouseDown}
                   onClick={handleSend}
                   disabled={!inputValue.trim() || isLoading}
                   className="bg-accent-teal hover:bg-accent-teal-700 text-bg shrink-0"

@@ -4,10 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import Research from "./pages/Research";
-import PropBuilder from "./pages/PropBuilder";
-import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -18,15 +14,19 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Core routes */}
           <Route path="/" element={<Navigate to="/ask" replace />} />
           <Route path="/ask" element={<Index />} />
           <Route path="/players" element={<Index />} />
           <Route path="/props" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/research" element={<Research />} />
-          <Route path="/prop-builder" element={<PropBuilder />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          
+          {/* Legacy redirects */}
+          <Route path="/dashboard" element={<Navigate to="/ask" replace />} />
+          <Route path="/research" element={<Navigate to="/ask" replace />} />
+          <Route path="/prop-builder" element={<Navigate to="/props" replace />} />
+          
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to="/ask" replace />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
