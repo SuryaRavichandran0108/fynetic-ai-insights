@@ -5,10 +5,12 @@ interface TrendingCardProps {
   question: string;
   playerName: string;
   propLine: string;
+  team?: string;
+  avatarSrc?: string;
   onClick: () => void;
 }
 
-export function TrendingCard({ question, playerName, propLine, onClick }: TrendingCardProps) {
+export function TrendingCard({ question, playerName, propLine, team, avatarSrc, onClick }: TrendingCardProps) {
   return (
     <button
       onClick={onClick}
@@ -30,7 +32,24 @@ export function TrendingCard({ question, playerName, propLine, onClick }: Trendi
         
         {/* Avatar circle */}
         <div className="relative shrink-0">
-          <div className="size-12 rounded-full bg-gradient-to-br from-white/8 to-white/2 ring-1 ring-white/10" />
+          <div className="size-12 rounded-full ring-1 ring-white/10 overflow-hidden bg-gradient-to-br from-white/8 to-white/2 grid place-items-center">
+            {avatarSrc ? (
+              <img
+                src={avatarSrc}
+                alt=""
+                className="w-full h-full object-cover"
+                loading="eager"
+                decoding="async"
+              />
+            ) : (
+              <span className="text-[11px] tracking-wide text-white/70">{team || "FY"}</span>
+            )}
+          </div>
+          {team && (
+            <span className="absolute -bottom-1 -right-1 text-[10px] px-1.5 py-[2px] rounded-full bg-[var(--bg)] border border-white/10">
+              {team}
+            </span>
+          )}
         </div>
 
         {/* Chevron */}

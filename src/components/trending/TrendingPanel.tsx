@@ -7,24 +7,32 @@ const trendingData = [
     question: "How has Luka Dončić performed in his last 5 games?",
     playerName: "Luka Dončić",
     propLine: "3P over 2.5",
+    team: "DAL",
+    avatarSrc: "/avatars/luka-doncic.png",
   },
   {
     id: 2,
     question: "Is Tatum over 6.5 rebounds a good value?",
     playerName: "Jayson Tatum",
     propLine: "REB o/u 6.5",
+    team: "BOS",
+    avatarSrc: "/avatars/jayson-tatum.png",
   },
   {
     id: 3,
     question: "Compare Jokić vs Embiid over last 10 games.",
     playerName: "Nikola Jokić",
     propLine: "PTS+REB+AST o/u 44.5",
+    team: "DEN",
+    avatarSrc: "/avatars/nikola-jokic.png",
   },
   {
     id: 4,
     question: "How do injuries & pace affect tonight's total?",
-    playerName: "Lakers vs Warriors",
+    playerName: "Joel Embiid",
     propLine: "Total o/u 235.5",
+    team: "PHI",
+    avatarSrc: "/avatars/joel-embiid.png",
   },
 ];
 
@@ -49,6 +57,8 @@ export function TrendingPanel({ onSelect }: TrendingPanelProps) {
             question={item.question}
             playerName={item.playerName}
             propLine={item.propLine}
+            team={item.team}
+            avatarSrc={item.avatarSrc}
             onClick={() => onSelect(item.question)}
           />
         ))}
