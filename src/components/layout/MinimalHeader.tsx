@@ -1,16 +1,13 @@
 import { MessageSquare, Search, Target } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-interface MinimalHeaderProps {
-  currentPage: string;
-  onPageChange: (page: string) => void;
-}
-
-export function MinimalHeader({ currentPage, onPageChange }: MinimalHeaderProps) {
+export function MinimalHeader() {
+  const location = useLocation();
   const navigationItems = [
-    { id: "ask", label: "Ask FYNETIC", icon: MessageSquare },
-    { id: "players", label: "Explore Players", icon: Search },
-    { id: "props", label: "Prop Builder", icon: Target },
+    { path: "/ask", label: "Ask FYNETIC", icon: MessageSquare },
+    { path: "/players", label: "Explore Players", icon: Search },
+    { path: "/props", label: "Prop Builder", icon: Target },
   ];
 
   return (
@@ -19,11 +16,11 @@ export function MinimalHeader({ currentPage, onPageChange }: MinimalHeaderProps)
         <nav className="flex items-center gap-2">
           {navigationItems.map((item) => {
             const Icon = item.icon;
-            const isActive = currentPage === item.id;
+            const isActive = location.pathname === item.path;
             return (
-              <button
-                key={item.id}
-                onClick={() => onPageChange(item.id)}
+              <Link
+                key={item.path}
+                to={item.path}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2",
@@ -35,7 +32,7 @@ export function MinimalHeader({ currentPage, onPageChange }: MinimalHeaderProps)
               >
                 <Icon className="h-4 w-4" />
                 <span className="hidden sm:inline">{item.label}</span>
-              </button>
+              </Link>
             );
           })}
         </nav>
