@@ -17,6 +17,11 @@ export function saveRecentProp(ticket: PropTicket) {
   localStorage.setItem(KEY, JSON.stringify(next));
 }
 
+export function deleteRecentProp(id: string) {
+  const list = loadRecentProps().filter(t => t.id !== id);
+  localStorage.setItem(KEY, JSON.stringify(list));
+}
+
 export function clearRecentProps() {
   localStorage.removeItem(KEY);
 }

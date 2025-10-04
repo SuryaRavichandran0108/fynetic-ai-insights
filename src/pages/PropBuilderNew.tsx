@@ -295,7 +295,7 @@ export default function PropBuilderNew() {
           ) : (
             <div className="space-y-3">
               {recent.map((t) => (
-                <PropTicketCard key={t.id} ticket={t} />
+                <PropTicketCard key={t.id} ticket={t} onRemoved={() => setRecent(loadRecentProps())} />
               ))}
             </div>
           )}
