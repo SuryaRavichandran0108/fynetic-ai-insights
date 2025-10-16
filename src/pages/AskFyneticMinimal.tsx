@@ -9,6 +9,8 @@ import { TrendingPanel } from "@/components/trending/TrendingPanel";
 import { getConfidenceTier, getConfidenceColor } from "@/utils/confidence";
 import type { ExploreContextPayload } from "@/types/explore";
 import type { PropContextPayload } from "@/types/props";
+import { askLLM } from "@/lib/llmClient";
+import { useToast } from "@/hooks/use-toast";
 
 type AskIncomingContext = ExploreContextPayload | PropContextPayload | null;
 
@@ -47,6 +49,7 @@ function ConfidenceIndicator({ value }: ConfidenceIndicatorProps) {
 export default function AskFyneticMinimal() {
   const location = useLocation();
   const incomingContext = (location.state?.context ?? null) as AskIncomingContext;
+  const { toast } = useToast();
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -83,21 +86,51 @@ export default function AskFyneticMinimal() {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const userInput = inputValue;
     setInputValue("");
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Determine source based on incoming context
+      let source: "explore" | "prop" | "freeform" = "freeform";
+      let exploreContext: unknown = undefined;
+      let propContext: unknown = undefined;
+
+      if (incomingContext) {
+        if (incomingContext.type === "player_query") {
+          source = "explore";
+          exploreContext = incomingContext;
+        } else if (incomingContext.type === "prop_ticket") {
+          source = "prop";
+          propContext = incomingContext;
+        }
+      }
+
+      const res = await askLLM({
+        message: userInput,
+        source,
+        exploreContext,
+        propContext,
+      });
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "Based on the available data, here's my analysis:\n\n• Luka has been averaging 28.4 points over his last 5 games\n• His shooting efficiency has improved to 47% from the field\n• He's dealing with minor ankle soreness but it hasn't affected his performance\n• Against similar opponents, he typically exceeds this line 67% of the time\n\nThe matchup favors Luka with a pace-up spot and potential overtime scenario.",
-        confidence: 72,
+        content: res.answer_markdown,
+        confidence: 72, // Mock confidence for now
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, aiMessage]);
+    } catch (e: any) {
+      toast({
+        title: "Error",
+        description: e.message || "Something went wrong contacting FYNETIC LLM.",
+        variant: "destructive",
+      });
+      console.error("LLM error:", e);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const handleTrendingSelect = (question: string) => {
