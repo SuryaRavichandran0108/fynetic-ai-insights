@@ -85,8 +85,25 @@ serve(async (req) => {
       propPreview: propContext ? safePreview(propContext) : undefined,
     };
 
+    const numericHint = {
+      vegas_line: (propContext as any)?.vegas_line ?? null,
+      recent_avg: (propContext as any)?.recent_avg ?? null,
+    };
+    
+    console.log("ask-fynetic input", {
+      source,
+      hasProp: !!propContext,
+      sample: {
+        player: (propContext as any)?.player ?? null,
+        market: (propContext as any)?.market ?? null,
+        vegas_line: numericHint.vegas_line,
+        recent_avg: numericHint.recent_avg
+      }
+    });
+
     const messages = [
       { role: "system", content: systemPrompt },
+      { role: "system", content: `Numeric context: ${JSON.stringify(numericHint)}` },
       { role: "system", content: `Context:\n${JSON.stringify(context)}` },
       { role: "user", content: message },
     ];

@@ -17,6 +17,7 @@ const MOCK_LINES: Array<{ player: string; market: Market; line: number; odds?: n
   { player: "Luka Dončić",    market: "3PM", line: 2.5, odds: -115 },
   { player: "Nikola Jokić",   market: "PTS", line: 27.5, odds: -108 },
   { player: "Joel Embiid",    market: "PRA", line: 46.5, odds: -102 },
+  { player: "LaMelo Ball",    market: "PTS", line: 23.5, odds: -110 },
 ];
 
 class MockVegasProvider implements VegasLinesProvider {

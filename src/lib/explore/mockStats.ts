@@ -3,6 +3,25 @@ import { ExploreParsedQuery, ExploreStatsPreview } from "@/types/explore";
 export function getMockStats(parsed: ExploreParsedQuery): ExploreStatsPreview {
   const { player, opponent, venue, window } = parsed;
 
+  // Special case for LaMelo Ball
+  if (player && player.toLowerCase().includes("lamelo ball")) {
+    return {
+      summary: [
+        { label: "PPG", value: "23.1" },
+        { label: "RPG", value: "6.2" },
+        { label: "APG", value: "7.9" },
+      ],
+      gameLog: Array.from({ length: 5 }).map((_, i) => ({
+        opp: opponent ?? "—",
+        line: `${28 - i} PTS • ${7} REB • ${8} AST`,
+      })),
+      splits: [
+        { label: "Home", value: "24.3 PPG" },
+        { label: "Away", value: "22.3 PPG" },
+      ],
+    };
+  }
+
   // Fake numbers for now; deterministic by string length to feel stable.
   const seed = (player ?? "").length + (opponent ?? "").length + (venue ? 10 : 0);
   const ppg = (24 + (seed % 9) + 0.4).toFixed(1);

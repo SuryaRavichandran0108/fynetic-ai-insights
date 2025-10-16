@@ -7,6 +7,8 @@ export const PLAYER_ALIASES: Record<string, string> = {
   "jokic": "Nikola Jokić",
   "joel embiid": "Joel Embiid",
   "embiid": "Joel Embiid",
+  "lamelo ball": "LaMelo Ball",
+  "lamelo": "LaMelo Ball",
 };
 
 export const TEAM_ALIASES: Record<string, string> = {
