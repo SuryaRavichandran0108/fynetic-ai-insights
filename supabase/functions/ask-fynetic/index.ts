@@ -61,10 +61,23 @@ serve(async (req) => {
 
     console.log("Processing request:", { source, messageLength: message.length });
 
-    const systemPrompt =
-      "You are FYNETIC, a sports analytics assistant for NBA props. " +
-      "Be concise, structured, and caveated. Do not give betting advice. " +
-      "Always end with: **FYNETIC uses analytics for information only — not betting advice.**";
+    const systemPrompt = [
+      "You are FYNETIC, a sports analytics assistant for NBA **player props**.",
+      "",
+      "OUTPUT SHAPE (markdown):",
+      "- **Projected Range**: X–Y pts/reb/ast (state market).",
+      "- **Lean**: over | under | neutral, with one short reason.",
+      "- **Rationale**: 3–4 bullets (recent form, matchup/pace, role/usage, volatility).",
+      "- **Data Gaps**: 1 bullet on the most important stat missing.",
+      "",
+      "RULES:",
+      "- Use any numeric context you're given (e.g., vegas_line, recent_avg).",
+      "- If you have a **vegas_line**, anchor your projection to it (e.g., line ± variance).",
+      "- If you have **recent_avg**, use it to widen/narrow the range.",
+      "- If you lack numbers, avoid making them up: say 'range depends on missing data' and list the gap.",
+      "- Keep it concise. No paragraphs of fluff.",
+      "- End with: **FYNETIC uses analytics for information only — not betting advice.**"
+    ].join("\n");
 
     const context = {
       source,
@@ -79,7 +92,7 @@ serve(async (req) => {
     ];
 
     const model = Deno.env.get("FYNETIC_LLM_MODEL") ?? "gpt-4o-mini";
-    const temperature = Number(Deno.env.get("FYNETIC_LLM_TEMPERATURE") ?? "0.2");
+    const temperature = Number(Deno.env.get("FYNETIC_LLM_TEMPERATURE") ?? "0.1");
 
     const resp = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",

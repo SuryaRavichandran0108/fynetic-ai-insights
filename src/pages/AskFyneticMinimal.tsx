@@ -10,6 +10,7 @@ import { getConfidenceTier, getConfidenceColor } from "@/utils/confidence";
 import type { ExploreContextPayload } from "@/types/explore";
 import type { PropContextPayload } from "@/types/props";
 import { askLLM } from "@/lib/llmClient";
+import { buildPropContextFromFreeform } from "@/lib/enrichFreeform";
 import { useToast } from "@/hooks/use-toast";
 
 type AskIncomingContext = ExploreContextPayload | PropContextPayload | null;
@@ -103,6 +104,16 @@ export default function AskFyneticMinimal() {
         } else if (incomingContext.type === "prop_ticket") {
           source = "prop";
           propContext = incomingContext;
+        }
+      }
+
+      // Auto-enrich freeform with prop context if possible
+      if (source === "freeform" && !propContext) {
+        try {
+          const auto = await buildPropContextFromFreeform(userInput);
+          if (auto) propContext = auto;
+        } catch (e) {
+          console.log("Could not auto-enrich:", e);
         }
       }
 
