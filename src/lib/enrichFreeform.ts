@@ -2,6 +2,7 @@ import { quickParseIntent } from "./nlp";
 import { getMockStats } from "@/lib/explore/mockStats";
 import { VegasLinesService } from "@/lib/vegas/VegasLinesService";
 import { PLAYER_ALIASES } from "@/lib/explore/dictionaries";
+import { supabase } from "@/lib/supabase";
 import type { Market } from "@/types/props";
 
 function resolvePlayerAlias(text: string): string | undefined {
@@ -61,13 +62,68 @@ export async function buildPropContextFromFreeform(message: string) {
     console.log("[enrich] getMockStats failed", e);
   }
 
-  // --- vegas_line from mock provider ---
+  // --- vegas_line: prefer cached odds, fallback to fetch-odds, then mock ---
   let vegas_line: number | undefined;
+  
+  // 1) Try cached odds from Supabase
   try {
-    const vegas = await VegasLinesService.fetchBaseline({ player, market, league: "NBA" });
-    vegas_line = vegas?.line;
+    const today = new Date().toISOString().slice(0, 10);
+    const { data: cached } = await supabase
+      .from("odds_props")
+      .select("line")
+      .eq("player", player)
+      .eq("market", market)
+      .gte("game_date", today)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    
+    if (cached?.line) {
+      vegas_line = Number(cached.line);
+      console.log("[enrich] Using cached odds:", vegas_line);
+    }
   } catch (e) {
-    console.log("[enrich] VegasLinesService failed", e);
+    console.log("[enrich] Cache read failed:", e);
+  }
+  
+  // 2) If no cached odds, trigger fetch-odds to populate cache
+  if (vegas_line === undefined) {
+    try {
+      console.log("[enrich] No cached odds, invoking fetch-odds...");
+      await supabase.functions.invoke("fetch-odds", {
+        body: { players: [player], markets: [market] }
+      });
+      
+      // Re-query after fetch
+      const today = new Date().toISOString().slice(0, 10);
+      const { data: cached } = await supabase
+        .from("odds_props")
+        .select("line")
+        .eq("player", player)
+        .eq("market", market)
+        .gte("game_date", today)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      if (cached?.line) {
+        vegas_line = Number(cached.line);
+        console.log("[enrich] Fetched and cached:", vegas_line);
+      }
+    } catch (e) {
+      console.log("[enrich] fetch-odds invocation failed:", e);
+    }
+  }
+  
+  // 3) Last resort: fallback to legacy mock provider
+  if (vegas_line === undefined) {
+    try {
+      const vegas = await VegasLinesService.fetchBaseline({ player, market, league: "NBA" });
+      vegas_line = vegas?.line;
+      console.log("[enrich] Fallback to legacy mock:", vegas_line);
+    } catch (e) {
+      console.log("[enrich] VegasLinesService fallback failed:", e);
+    }
   }
 
   const payload = {

@@ -26,8 +26,8 @@ export function MinimalHeader() {
                   "px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30",
                   isActive 
-                    ? "bg-[var(--surface)] text-white ring-1 ring-white/20 shadow-[0_0_0_2px_rgba(255,255,255,0.04),0_0_18px_rgba(255,255,255,0.10)]" 
-                    : "text-white/70 hover:text-white hover:ring-1 hover:ring-white/12 hover:shadow-[0_0_12px_rgba(255,255,255,0.06)]"
+                    ? "text-white ring-2 ring-white/30 shadow-[0_0_16px_rgba(255,255,255,0.20)] bg-transparent" 
+                    : "text-white/70 hover:text-white hover:bg-white/5"
                 )}
               >
                 <Icon className="h-4 w-4" />
