@@ -41,6 +41,45 @@ export type Database = {
         }
         Relationships: []
       }
+      odds_props: {
+        Row: {
+          book: string | null
+          game_date: string | null
+          id: number
+          line: number
+          market: string
+          odds_american: number | null
+          opponent: string | null
+          player: string
+          team: string | null
+          updated_at: string
+        }
+        Insert: {
+          book?: string | null
+          game_date?: string | null
+          id?: number
+          line: number
+          market: string
+          odds_american?: number | null
+          opponent?: string | null
+          player: string
+          team?: string | null
+          updated_at?: string
+        }
+        Update: {
+          book?: string | null
+          game_date?: string | null
+          id?: number
+          line?: number
+          market?: string
+          odds_american?: number | null
+          opponent?: string | null
+          player?: string
+          team?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pins: {
         Row: {
           created_at: string
