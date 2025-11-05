@@ -22,10 +22,10 @@ export function TrendingCard({ question, playerName, propLine, team, avatarSrc, 
     >
       <div className="flex items-center gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-[15px] text-text-primary font-medium line-clamp-2 mb-2 group-hover:text-accent-teal transition-colors">
+          <p className="text-[15px] text-text-primary font-medium line-clamp-2 mb-2 group-hover:text-primary-400 transition-colors">
             {question}
           </p>
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[13px] text-accent-teal font-medium">
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[13px] text-primary-400 font-medium">
             {propLine}
           </div>
         </div>

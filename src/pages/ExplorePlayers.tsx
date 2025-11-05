@@ -98,19 +98,19 @@ function PlayerCard({ player }: { player: Player }) {
           <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-accent-teal">{player.stats.ppg}</p>
+                <p className="text-2xl font-bold text-primary-500">{player.stats.ppg}</p>
                 <p className="text-xs text-text-muted">PPG</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-accent-teal">{player.stats.rpg}</p>
+                <p className="text-2xl font-bold text-primary-500">{player.stats.rpg}</p>
                 <p className="text-xs text-text-muted">RPG</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-accent-teal">{player.stats.apg}</p>
+                <p className="text-2xl font-bold text-primary-500">{player.stats.apg}</p>
                 <p className="text-xs text-text-muted">APG</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-accent-teal">{player.stats.fg_pct}%</p>
+                <p className="text-2xl font-bold text-primary-500">{player.stats.fg_pct}%</p>
                 <p className="text-xs text-text-muted">FG%</p>
               </div>
             </div>
@@ -121,7 +121,7 @@ function PlayerCard({ player }: { player: Player }) {
                 {player.recentGames.map((points, index) => (
                   <div key={index} className="flex-1 flex flex-col items-center">
                     <div
-                      className="w-full bg-accent-teal/80 rounded-t-sm"
+                      className="w-full bg-primary-500/80 rounded-t-sm"
                       style={{ height: `${(points / 35) * 100}%` }}
                     />
                     <span className="text-xs text-text-muted mt-1">{points}</span>
@@ -145,11 +145,11 @@ function PlayerCard({ player }: { player: Player }) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm font-medium text-text-primary">Home</p>
-                <p className="text-lg text-accent-teal">29.2 PPG</p>
+                <p className="text-lg text-primary-500">29.2 PPG</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-text-primary">Away</p>
-                <p className="text-lg text-accent-teal">27.6 PPG</p>
+                <p className="text-lg text-primary-500">27.6 PPG</p>
               </div>
             </div>
           </TabsContent>
@@ -164,7 +164,7 @@ function PlayerCard({ player }: { player: Player }) {
         <div className="mt-4 text-right">
           <button 
             onClick={handleAskFynetic}
-            className="text-accent-teal hover:text-accent-teal-700 text-sm font-medium inline-flex items-center gap-1"
+            className="text-primary-400 hover:text-primary-300 text-sm font-medium inline-flex items-center gap-1"
           >
             Ask FYNETIC about this →
           </button>
@@ -229,7 +229,7 @@ export default function ExplorePlayers() {
       <div className="border-b border-border bg-surface-2/50 p-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
-            <Search className="h-6 w-6 text-accent-teal" />
+            <Search className="h-6 w-6 text-primary-500" />
             <h1 className="text-xl font-semibold text-text-primary">Explore Players</h1>
           </div>
           
@@ -305,7 +305,7 @@ export default function ExplorePlayers() {
                 <button
                   type="button"
                   onClick={handoffToAsk}
-                  className="inline-flex items-center gap-1 text-[13px] text-accent-teal hover:brightness-110 border border-white/10 rounded-full px-3 py-1.5 bg-white/[0.02] hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
+                  className="inline-flex items-center gap-1 text-[13px] text-primary-400 hover:text-primary-300 border border-white/10 rounded-full px-3 py-1.5 bg-white/[0.02] hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/60"
                 >
                   Ask FYNETIC about this →
                 </button>
@@ -315,7 +315,7 @@ export default function ExplorePlayers() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 {preview.summary.map((stat) => (
                   <div key={stat.label} className="text-center">
-                    <p className="text-2xl font-bold text-accent-teal">{stat.value}</p>
+                    <p className="text-2xl font-bold text-primary-500">{stat.value}</p>
                     <p className="text-xs text-text-muted">{stat.label}</p>
                   </div>
                 ))}

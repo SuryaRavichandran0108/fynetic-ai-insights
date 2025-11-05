@@ -47,7 +47,7 @@ export default function PropTicketCard({ ticket, onRemoved }: { ticket: PropTick
       <div className="mt-2 flex justify-between items-center">
         <button
           onClick={onAsk}
-          className="text-[13px] text-[var(--accent-teal)] hover:brightness-110"
+          className="text-[13px] text-primary-400 hover:text-primary-300"
         >
           Ask FYNETIC →
         </button>

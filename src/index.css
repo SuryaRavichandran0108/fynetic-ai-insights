@@ -31,6 +31,9 @@ All colors MUST be HSL format for proper theming.
 
 @layer base {
   :root {
+    /* Brand Color (Exact RGB) */
+    --brand-green-rgb: 0 224 106;
+    
     /* Background Colors - Fixed HSL values */
     --background: 222 42% 8%; /* Deep Navy Charcoal #0B0F19 */
     --foreground: 213 27% 94%; /* Warm Off-White #F1F5F9 */
@@ -108,6 +111,9 @@ All colors MUST be HSL format for proper theming.
   }
 
   .dark {
+    /* Brand Color (Exact RGB) */
+    --brand-green-rgb: 0 224 106;
+    
     /* Dark Mode maintains consistent cyber-teal theme - Fixed HSL values */
     --background: 222 42% 8%; /* Deep Navy Charcoal #0B0F19 */
     --foreground: 213 27% 94%; /* Warm Off-White #F1F5F9 */

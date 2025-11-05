@@ -18,12 +18,12 @@ export function GameTicker() {
             key={`${game.id}-${index}`}
             className="flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg)]/60 border border-white/10 whitespace-nowrap"
           >
-            <Activity className="h-3 w-3 text-accent-teal" />
+            <Activity className="h-3 w-3 text-primary-500" />
             <span className="text-xs text-text-primary">
-              {game.away} @ {game.home} • {game.time}
+              {game.away} @ {game.home}
             </span>
             <span className="text-xs text-text-muted">—</span>
-            <span className="text-xs text-accent-teal font-medium">{game.prop}</span>
+            <span className="text-xs text-primary-400 font-medium">{game.prop}</span>
           </div>
         ))}
       </div>

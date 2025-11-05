@@ -6,7 +6,7 @@ export default function PremiumPaywall() {
         Build and analyze your props with Vegas baselines, then chat with FYNETIC for deeper, AI-forward insights.
       </p>
       <div className="mt-5 flex justify-center gap-3">
-        <a className="px-4 py-2 rounded-lg bg-[var(--accent-teal)]/90 hover:brightness-110 text-black font-medium" href="#">
+        <a className="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-black font-medium" href="#">
           Upgrade to Premium
         </a>
         <a className="px-4 py-2 rounded-lg border border-white/15 hover:bg-white/[0.04]" href="/ask">

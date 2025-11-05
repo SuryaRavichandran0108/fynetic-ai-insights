@@ -66,7 +66,7 @@ export function TrendingPopover({ open, onPick, anchorRef, onClose }: TrendingPo
         }}
       >
         <div className="flex items-center gap-2 mb-3 px-2">
-          <TrendingUp className="h-4 w-4 text-accent-teal" />
+          <TrendingUp className="h-4 w-4 text-primary-500" />
           <span className="text-sm font-medium text-text-primary">Trending questions</span>
         </div>
         

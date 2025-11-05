@@ -12,14 +12,15 @@ export function MinimalHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#1b2433] bg-[var(--surface)] h-[58px]">
-      <div className="max-w-[1100px] mx-auto px-4 h-full flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <img src="/brand/fynetic-logo.svg" alt="FYNETIC" className="h-8 w-auto" />
+      <div className="max-w-[1400px] mx-auto px-4 h-full flex items-center">
+        {/* Logo - Left */}
+        <Link to="/" className="flex items-center shrink-0">
+          <img src="/brand/fynetic-logo-official.png" alt="FYNETIC" className="h-8 w-auto" />
         </Link>
         
-        {/* Navigation */}
-        <nav className="flex items-center gap-2">
+        {/* Navigation - Center */}
+        <nav className="flex-1 flex justify-center">
+          <div className="flex items-center gap-2">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -41,7 +42,11 @@ export function MinimalHeader() {
               </Link>
             );
           })}
+          </div>
         </nav>
+        
+        {/* Right spacer for balance */}
+        <div className="shrink-0 w-[32px]"></div>
       </div>
     </header>
   );
