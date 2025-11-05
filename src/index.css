@@ -42,10 +42,10 @@ All colors MUST be HSL format for proper theming.
     --popover: 217 19% 15%;
     --popover-foreground: 213 27% 94%;
     
-    /* Primary Brand (Cyber Teal) - Fixed HSL values */
-    --primary: 174 100% 39%; /* Cyber Teal #00C6AE */
-    --primary-foreground: 213 27% 94%;
-    --primary-hover: 174 100% 45%;
+    /* Primary Brand (FYNETIC Green) - Fixed HSL values */
+    --primary: 151 100% 44%; /* FYNETIC Green #00E06A */
+    --primary-foreground: 0 0% 0%; /* Black text on green */
+    --primary-hover: 151 100% 50%;
     
     /* Secondary (Electric Blue) - Fixed HSL values */
     --secondary: 217 91% 60%; /* Electric Blue #2563EB */
@@ -56,10 +56,10 @@ All colors MUST be HSL format for proper theming.
     --muted: 217 19% 23%; /* Neutral Border #2C3445 */
     --muted-foreground: 214 15% 59%; /* Muted Gray #94A3B8 */
     
-    /* Accent (Cyber Teal) - Fixed HSL values */
-    --accent: 174 100% 39%;
-    --accent-foreground: 213 27% 94%;
-    --accent-hover: 174 100% 45%;
+    /* Accent (FYNETIC Green) - Fixed HSL values */
+    --accent: 151 100% 44%;
+    --accent-foreground: 0 0% 0%;
+    --accent-hover: 151 100% 50%;
     
     /* Status Colors - Fixed HSL values */
     --destructive: 0 84% 60%; /* Red #EF4444 */
@@ -77,17 +77,17 @@ All colors MUST be HSL format for proper theming.
     /* Border & Input - Fixed HSL values */
     --border: 217 19% 23%;
     --input: 217 19% 23%;
-    --ring: 174 100% 39%;
+    --ring: 151 100% 44%;
     
     /* Chart Colors - Fixed HSL values */
-    --chart-1: 174 100% 39%; /* Cyber Teal */
+    --chart-1: 151 100% 44%; /* FYNETIC Green */
     --chart-2: 217 91% 60%; /* Electric Blue */
     --chart-3: 142 71% 45%; /* Emerald */
     --chart-4: 262 83% 58%; /* Purple */
     --chart-5: 43 96% 56%; /* Amber */
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(174 100% 39%));
+    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(151 100% 44%));
     --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
     --gradient-surface: linear-gradient(145deg, hsl(217 19% 23% / 0.3), hsl(217 19% 23% / 0.1));
     
@@ -118,13 +118,13 @@ All colors MUST be HSL format for proper theming.
     --popover: 217 19% 15%;
     --popover-foreground: 213 27% 94%;
     
-    --primary: 174 100% 39%; /* Cyber Teal #00C6AE */
-    --primary-foreground: 213 27% 94%;
-    --primary-hover: 174 100% 45%;
+    --primary: 151 100% 44%; /* FYNETIC Green #00E06A */
+    --primary-foreground: 0 0% 0%;
+    --primary-hover: 151 100% 50%;
     
-    --accent: 174 100% 39%;
-    --accent-foreground: 213 27% 94%;
-    --accent-hover: 174 100% 45%;
+    --accent: 151 100% 44%;
+    --accent-foreground: 0 0% 0%;
+    --accent-hover: 151 100% 50%;
     
     --secondary: 217 91% 60%; /* Electric Blue #2563EB */
     --secondary-foreground: 213 27% 94%;
@@ -144,9 +144,9 @@ All colors MUST be HSL format for proper theming.
     
     --border: 217 19% 23%;
     --input: 217 19% 23%;
-    --ring: 174 100% 39%;
+    --ring: 151 100% 44%;
     
-    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(174 100% 39%));
+    --gradient-primary: linear-gradient(135deg, hsl(222 42% 8%), hsl(151 100% 44%));
     --gradient-card: linear-gradient(145deg, hsl(217 19% 15%), hsl(217 19% 18%));
     --gradient-surface: linear-gradient(145deg, hsl(217 19% 23% / 0.3), hsl(217 19% 23% / 0.1));
   }

@@ -193,7 +193,7 @@ export default function PropBuilderNew() {
                   {edge !== null && (
                     <span className={
                       "inline-flex items-center gap-1 px-2 py-0.5 rounded-full border " +
-                      (edge > 0.01 ? "border-[var(--accent-teal)] text-[var(--accent-teal)] bg-[var(--accent-teal)]/10" :
+                      (edge > 0.01 ? "border-primary-500 text-primary-400 bg-primary-500/10" :
                        edge < -0.01 ? "border-white/15 text-white/70 bg-white/[0.04]" :
                                       "border-white/10 text-white/60 bg-white/[0.04]")}
                     >
@@ -213,7 +213,7 @@ export default function PropBuilderNew() {
                   type="button"
                   onClick={() => setSide("over")}
                   className={"px-4 py-2 text-sm transition-colors " + (side === "over"
-                    ? "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)] border-r border-white/10"
+                    ? "bg-primary-500/10 text-primary-400 border-r border-white/10"
                     : "text-white/70 hover:bg-white/[0.04] border-r border-white/10")}
                 >
                   Over
@@ -222,7 +222,7 @@ export default function PropBuilderNew() {
                   type="button"
                   onClick={() => setSide("under")}
                   className={"px-4 py-2 text-sm transition-colors " + (side === "under"
-                    ? "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]"
+                    ? "bg-primary-500/10 text-primary-400"
                     : "text-white/70 hover:bg-white/[0.04]")}
                 >
                   Under
@@ -279,7 +279,7 @@ export default function PropBuilderNew() {
               className={
                 "px-4 py-2.5 rounded-lg font-medium transition-all " +
                 (isValid
-                  ? "bg-[var(--accent-teal)]/90 text-black hover:brightness-110"
+                  ? "bg-primary-500 text-black hover:bg-primary-600 hover:shadow-[0_0_0_3px_rgba(0,224,106,0.25)]"
                   : "bg-white/[0.06] text-white/40 cursor-not-allowed")
               }
             >

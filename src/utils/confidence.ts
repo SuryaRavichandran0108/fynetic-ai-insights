@@ -5,7 +5,7 @@ export const getConfidenceTier = (value: number): "Low" | "Medium" | "High" => {
 };
 
 export const getConfidenceColor = (value: number): string => {
-  if (value >= 70) return "bg-accent-teal";
+  if (value >= 70) return "bg-primary-500";
   if (value >= 40) return "bg-warning";
   return "bg-negative";
 };

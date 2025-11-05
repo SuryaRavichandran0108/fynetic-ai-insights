@@ -225,7 +225,7 @@ export default function AskFyneticMinimal() {
                         "max-w-2xl rounded-lg px-4 py-3",
                         message.role === "user"
                           ? "bg-surface ml-12"
-                          : "bg-surface/50 border-l-2 border-l-accent-teal"
+                          : "bg-surface/50 border-l-2 border-l-primary-500"
                       )}
                     >
                       <div className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
@@ -240,7 +240,7 @@ export default function AskFyneticMinimal() {
 
                 {isLoading && (
                   <div className="flex gap-3 justify-start">
-                    <div className="bg-surface/50 border-l-2 border-l-accent-teal rounded-lg px-4 py-3">
+                    <div className="bg-surface/50 border-l-2 border-l-primary-500 rounded-lg px-4 py-3">
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                         <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]"></div>
@@ -272,7 +272,7 @@ export default function AskFyneticMinimal() {
                   onMouseDown={handleSendMouseDown}
                   onClick={handleSend}
                   disabled={!inputValue.trim() || isLoading}
-                  className="bg-accent-teal hover:bg-accent-teal-700 text-bg shrink-0"
+                  className="bg-primary-500 hover:bg-primary-600 text-black shrink-0"
                   size="sm"
                 >
                   <Send className="h-4 w-4" />
